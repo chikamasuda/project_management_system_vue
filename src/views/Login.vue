@@ -10,16 +10,16 @@
           <v-row justify="center" align-content="center">
           <v-col cols="11">
             <v-text-field round label="Eメール" class="mt-5 pb-0 pt-5" variant="solo" v-model="email"></v-text-field>
-            <ul class="error text-left pb-5" v-for="error in emailError">
+            <ul class="error text-left mt-1" v-for="error in emailError">
               <li>{{ error }}</li>
             </ul>
-            <v-text-field type="password" round label="パスワード" variant="solo" v-model="password"></v-text-field>
-            <ul class="error text-left pb-5" v-for="error in passwordError">
+            <v-text-field class="mt-4" type="password" round label="パスワード" variant="solo" v-model="password"></v-text-field>
+            <ul class="error text-left mt-1" v-for="error in passwordError">
               <li>{{ error }}</li>
             </ul>
           </v-col>
           </v-row>
-          <v-btn class="text-none mb-5" color="blue-darken-1" size="large" @click="login">
+          <v-btn class="text-none mb-5 mt-5" color="blue-darken-1" size="large" @click="login">
             ログイン
           </v-btn>
         </v-card>
@@ -31,7 +31,7 @@
 import { ref } from "vue"
 import axios from '../plugins/axios.js'
 import { useRouter } from 'vue-router'
-import Axios from 'axios';
+import cookie from 'vue-cookie'
 
 const tab = ref<string>('')
 const email = ref<string>('')
@@ -50,6 +50,7 @@ const login = async () => {
   }).then((res) => {
     email.value = ""
     password.value = ""
+    cookie.set('user_token', JSON.parse(res.data.token)['access_token'], 30)
     router.push('/')
   }).catch((error) => {
     console.log(error)

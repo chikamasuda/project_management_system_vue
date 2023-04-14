@@ -9,12 +9,12 @@
       <v-card class="text-center">
         <v-row justify="center" align-content="center">
           <v-col cols="11">
-            <v-text-field round label="名前" class="mt-5 pt-5" variant="solo"></v-text-field>
-            <v-text-field round label="Eメール" class="" variant="solo"></v-text-field>
-            <v-text-field round label="パスワード" variant="solo"></v-text-field>
+            <v-text-field round label="名前" class="mt-4 pt-5" variant="solo"></v-text-field>
+            <v-text-field round label="Eメール" class="mt-4" variant="solo"></v-text-field>
+            <v-text-field round label="パスワード" variant="solo" class="mt-4"></v-text-field>
           </v-col>
         </v-row>
-        <v-btn class="text-none mb-5" color="blue-darken-1" size="large">
+        <v-btn class="text-none mb-5 mt-4" color="blue-darken-1" size="large">
           新規登録
         </v-btn>
       </v-card>

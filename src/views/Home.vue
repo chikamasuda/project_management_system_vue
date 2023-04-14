@@ -11,12 +11,13 @@
             size="64"
           >
           <img
-            src="https://picsum.photos/64/64?random"
+            :src="user.image_url"
             alt="avatarImage"
+            class="avator"
           />
           </v-avatar>
 
-          <div>テストユーザー１</div>
+          <div>{{  user.name }}</div>
         </v-sheet>
 
         <v-divider class="border-opacity-25"></v-divider>
@@ -47,7 +48,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
+import axios from '../plugins/axios.js'
 
 const drawer = ref<boolean>(true)
 const links =ref([
@@ -61,4 +63,16 @@ const links =ref([
   ['mdi-exit-to-app', 'ログアウト'],
 ])
 const cards = ref(['Today', 'Yesterday'])
+const user = ref([])
+
+onMounted(async () => {
+  // ユーザー取得
+  await axios.get('/api/users')
+    .then((res) => {
+      user.value = res.data.user
+      console.log(res) 
+    }).catch((error) => {
+      console.log(error)
+    })
+})
 </script>

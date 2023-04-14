@@ -94,3 +94,12 @@ li {
 .error {
   color: red;
 }
+
+.v-text-field .v-input__details {
+  display: none;
+}
+
+.avator {
+  width: 64px;
+  height: 64px;
+}
