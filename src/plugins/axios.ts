@@ -1,6 +1,7 @@
 
 import axios from "axios";
 import cookie from 'vue-cookie';
+import Axios, { AxiosError } from 'axios';
 
 const env = import.meta.env.VITE_APP_ENV
 const token = 'Bearer ' + cookie.get('user_token')
@@ -21,11 +22,13 @@ const axiosInstance = axios.create({
   }
 })
 
-axios.interceptors.request.use(config => {
+axiosInstance.interceptors.request.use(config => {
   // クッキーからトークンを取り出してヘッダーに添付する
-  config.headers['Authorization'] = token
+  const token = 'Bearer ' + cookie.get('user_token')
+  config.headers.Authorization = `${token}`
+  console.log(token)
   return config
-}), function (error) {
+}), function (error: AxiosError) {
     return Promise.reject(error)
 }
 

@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import { ref } from "vue"
+const tab = ref('')
+</script>
+
 <template>
   <v-card color="basil" class="auth-card">
     <v-tabs v-model="tab" bg-color="transparent" color="blue-darken-3" grow>
@@ -21,10 +26,3 @@
     </v-tab-item>
   </v-card>
 </template>
-
-<script setup lang="ts">
-import { ref } from "vue"
-
-const tab = ref('')
-
-</script>

@@ -1,3 +1,40 @@
+<script setup lang="ts">
+import { ref } from "vue"
+import axios from '../plugins/axios.js'
+import { useRouter } from 'vue-router'
+import cookie from 'vue-cookie'
+
+const tab = ref<string>('')
+const email = ref<string>('')
+const password = ref<string>('')
+
+const mismatchError = ref<string>('')
+const emailError = ref([])
+const passwordError = ref([])
+const router = useRouter()
+
+const login = async () => {
+  await axios.post('/api/users/login', {
+    email: email.value,
+    password: password.value,
+  }).then((res) => {
+    email.value = ""
+    password.value = ""
+    cookie.set('user_token', JSON.parse(res.data.token)['access_token'], 30)
+    localStorage.setItem('user_token', JSON.parse(res.data.token)['access_token'])
+    console.log(res)
+    router.push('/')
+  }).catch((error) => {
+    console.log(error)
+    if (error.response.status == "401") {
+      mismatchError.value = 'メールアドレスまたはパスワードに誤りがあります。'
+    }
+    emailError.value = error.response.data.data.errors['email'];
+    passwordError.value = error.response.data.data.errors['password'];
+  })
+}
+</script>
+
 <template>
   <v-card color="basil" class="auth-card">
       <v-tabs v-model="tab" bg-color="transparent" color="blue-darken-3" grow>
@@ -26,40 +63,3 @@
       </v-tab-item>
   </v-card>
 </template>
-
-<script setup lang="ts">
-import { ref } from "vue"
-import axios from '../plugins/axios.js'
-import { useRouter } from 'vue-router'
-import cookie from 'vue-cookie'
-
-const tab = ref<string>('')
-const email = ref<string>('')
-const password = ref<string>('')
-
-
-const mismatchError = ref<string>('')
-const emailError = ref([])
-const passwordError = ref([])
-const router = useRouter()
-
-const login = async () => {
-  await axios.post('/api/users/login', {
-    email: email.value,
-    password: password.value,
-  }).then((res) => {
-    email.value = ""
-    password.value = ""
-    cookie.set('user_token', JSON.parse(res.data.token)['access_token'], 30)
-    router.push('/')
-  }).catch((error) => {
-    console.log(error)
-    if (error.response.status == "401") {
-      mismatchError.value = 'メールアドレスまたはパスワードに誤りがあります。'
-    }
-    emailError.value = error.response.data.data.errors['email'];
-    passwordError.value = error.response.data.data.errors['password'];
-  })
-}
-
-</script>

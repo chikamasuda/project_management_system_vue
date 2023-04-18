@@ -1,3 +1,51 @@
+<script setup lang="ts">
+import { ref, onMounted, reactive } from "vue"
+import axios from '../plugins/axios.js'
+import { useRouter } from 'vue-router'
+import Axios, { AxiosResponse, AxiosError } from 'axios';
+
+const drawer = ref<boolean>(true)
+const links = ref([
+  ['mdi-home', 'ホーム'],
+  ['mdi-face-woman', '顧客管理'],
+  ['mdi-briefcase ', '案件管理'],
+  ['mdi-check-bold', 'Todo管理'],
+  ['mdi-currency-usd', '売上管理'],
+  ['mdi-poll', '売上分析'],
+  ['mdi-account', 'ユーザー設定'],
+])
+
+const user = ref({})
+
+type APIResult = {
+  user: User[],
+};
+
+type User = typeof user;
+
+const router = useRouter()
+
+onMounted(async () => {
+  // ユーザー取得
+  await axios.get('/api/users')
+    .then((res: AxiosResponse<APIResult>) => {
+      user.value = res.data.user
+      console.log(res)
+    }).catch((error: AxiosError) => {
+      console.log(error)
+    })
+})
+
+const logout = async () => {
+  await axios.post('/api/users/logout')
+    .then(() => {
+      router.push('/login')
+    }).catch((error: AxiosError) => {
+      console.log(error)
+    })
+}
+</script>
+
 <template>
   <v-app>
     <v-navigation-drawer color="blue-darken-3" v-model="drawer" clipped>
@@ -12,7 +60,6 @@
           >
           <img
             :src="user.image_url"
-            alt="avatarImage"
             class="avator"
           />
           </v-avatar>
@@ -35,6 +82,12 @@
 
             <v-list-item-title>{{ text }}</v-list-item-title>
           </v-list-item>
+          <v-list-item @click="logout()" link>
+            <template v-slot:prepend>
+                <v-icon>mdi-exit-to-app</v-icon>
+            </template>
+            <v-list-item-title>ログアウト</v-list-item-title>
+          </v-list-item>
         </v-list>
     </v-navigation-drawer>
 
@@ -46,33 +99,3 @@
     </v-main>
   </v-app>
 </template>
-
-<script setup lang="ts">
-import { ref, onMounted } from "vue"
-import axios from '../plugins/axios.js'
-
-const drawer = ref<boolean>(true)
-const links =ref([
-  ['mdi-home', 'HOME'],
-  ['mdi-face-woman', '顧客管理'],
-  ['mdi-briefcase ', '案件管理'],
-  ['mdi-check-bold', 'Todo管理'],
-  ['mdi-currency-usd', '売上管理'],
-  ['mdi-poll', '売上分析'],
-  ['mdi-account', 'ユーザー設定'],
-  ['mdi-exit-to-app', 'ログアウト'],
-])
-const cards = ref(['Today', 'Yesterday'])
-const user = ref([])
-
-onMounted(async () => {
-  // ユーザー取得
-  await axios.get('/api/users')
-    .then((res) => {
-      user.value = res.data.user
-      console.log(res) 
-    }).catch((error) => {
-      console.log(error)
-    })
-})
-</script>
