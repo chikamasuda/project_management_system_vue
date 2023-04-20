@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, reactive } from "vue"
+import { Ref, ref, onMounted, reactive } from "vue"
 import axios from '../plugins/axios.js'
 import { useRouter } from 'vue-router'
 import Axios, { AxiosResponse, AxiosError } from 'axios';
 
+const router = useRouter()
 const drawer = ref<boolean>(true)
 const links = ref([
   ['mdi-home', 'ホーム'],
@@ -15,20 +16,23 @@ const links = ref([
   ['mdi-account', 'ユーザー設定'],
 ])
 
-const user = ref({})
-
-type APIResult = {
-  user: User[],
+type User = {
+  id: number,
+  name: string,
+  email: string,
+  image_url: string | undefined
 };
-
-type User = typeof user;
-
-const router = useRouter()
+const user: Ref<User> = ref({
+  id: 0,
+  name: '',
+  email: '',
+  image_url: ''
+})
 
 onMounted(async () => {
   // ユーザー取得
   await axios.get('/api/users')
-    .then((res: AxiosResponse<APIResult>) => {
+    .then((res: AxiosResponse) => {
       user.value = res.data.user
       console.log(res)
     }).catch((error: AxiosError) => {

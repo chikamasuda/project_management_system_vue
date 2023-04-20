@@ -3,9 +3,10 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import cookie from 'vue-cookie'
+import { NavigationGuardNext, RouteLocationNormalized, RouteRecordNormalized } from 'vue-router'
 
 //ユーザーが認証されていないときnextでログインページに飛ばす
-const requireAuth = (to, from, next) => {
+const requireAuth = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
   if (!cookie.get('user_token')) {
     next({ name: 'Login' })
   } else {
