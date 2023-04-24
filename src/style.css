@@ -29,11 +29,16 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #eee;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+.v-main {
+  background-color: #eee;
 }
 
 button {
@@ -55,26 +60,46 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-.card {
-  padding: 2em;
-}
-
 #app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
 }
 
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #fff;
   }
   a:hover {
     color: #747bff;
   }
   button {
-    background-color: #f9f9f9;
+    background-color: #fff;
   }
+}
+
+button:focus,
+button:focus-visible {
+  outline: none;
+}
+
+.auth-card {
+  width: 550px;
+}
+
+li {
+  list-style: none;
+}
+
+.error {
+  color: red;
+}
+
+.v-text-field .v-input__details {
+  display: none;
+}
+
+.avator {
+  width: 64px;
+  height: 64px;
 }
