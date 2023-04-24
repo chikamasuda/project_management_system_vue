@@ -103,3 +103,11 @@ li {
   width: 64px;
   height: 64px;
 }
+
+.v-application__wrap {
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  position: relative;
+}
