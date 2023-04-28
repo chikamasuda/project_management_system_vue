@@ -7,13 +7,13 @@ import Axios, { AxiosResponse, AxiosError } from 'axios';
 const router = useRouter()
 const drawer = ref<boolean>(true)
 const links = ref([
-  ['mdi-home', 'ホーム'],
-  ['mdi-face-woman', '顧客管理'],
-  ['mdi-briefcase ', '案件管理'],
-  ['mdi-check-bold', 'Todo管理'],
-  ['mdi-currency-usd', '売上管理'],
-  ['mdi-poll', '売上分析'],
-  ['mdi-account', 'ユーザー設定'],
+  ['mdi-home', 'ホーム', '/'],
+  ['mdi-face-woman', '顧客管理', ''],
+  ['mdi-briefcase ', '案件管理', ''],
+  ['mdi-check-bold', 'Todo管理', ''],
+  ['mdi-currency-usd', '売上管理', ''],
+  ['mdi-poll', '売上分析', ''],
+  ['mdi-account', 'ユーザー設定', ''],
 ])
 
 type User = {
@@ -61,10 +61,12 @@ const logout = async () => {
     <v-divider class="border-opacity-25"></v-divider>
     <v-list color="white">
       <v-list-item
-        v-for="[icon, text] in links"
+        v-for="([icon, text, to], index) in links"
         :key="icon"
         link
         class="text-white"
+        router 
+        :to="`${to[index]}`"
       >
         <template v-slot:prepend>
           <v-icon>{{ icon }}</v-icon>

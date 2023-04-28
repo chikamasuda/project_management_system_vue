@@ -36,7 +36,8 @@ const login = async () => {
 </script>
 
 <template>
-  <v-card color="basil" class="auth-card">
+  <div class="auth-container">
+    <v-card color="basil" class="auth-card mx-auto">
       <v-tabs v-model="tab" bg-color="transparent" color="blue-darken-3" grow>
         <v-tab to="/login">ログイン</v-tab>
         <v-tab to="/register">新規登録</v-tab>
@@ -61,5 +62,6 @@ const login = async () => {
           </v-btn>
         </v-card>
       </v-tab-item>
-  </v-card>
+    </v-card>
+  </div>
 </template>

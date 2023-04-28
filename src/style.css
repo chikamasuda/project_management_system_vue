@@ -26,8 +26,6 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
   background-color: #eee;
 }
@@ -60,11 +58,6 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-}
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -87,6 +80,10 @@ button:focus-visible {
   width: 550px;
 }
 
+#app {
+  width: 100%;
+}
+
 li {
   list-style: none;
 }
@@ -102,12 +99,35 @@ li {
 .avator {
   width: 64px;
   height: 64px;
+  border-radius: 50%;
+}
+
+.table-avator {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+.avator-block {
+  align-items: center;
 }
 
 .v-application__wrap {
-  backface-visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  position: relative;
+  background-color: #eee;
+}
+
+.auth-container {
+  margin: auto;
+}
+
+.v-label {
+  align-items: center;
+  display: inline-flex;
+  font-size: 1rem;
+  letter-spacing: 0.009375em;
+  min-width: 0;
+  opacity: unset!important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
