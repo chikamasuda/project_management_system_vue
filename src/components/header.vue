@@ -7,13 +7,41 @@ import Axios, { AxiosResponse, AxiosError } from 'axios';
 const router = useRouter()
 const drawer = ref<boolean>(true)
 const links = ref([
-  ['mdi-home', 'ホーム', '/'],
-  ['mdi-face-woman', '顧客管理', ''],
-  ['mdi-briefcase ', '案件管理', ''],
-  ['mdi-check-bold', 'Todo管理', ''],
-  ['mdi-currency-usd', '売上管理', ''],
-  ['mdi-poll', '売上分析', ''],
-  ['mdi-account', 'ユーザー設定', ''],
+  {
+    icon: 'mdi-home',
+    title: 'ホーム',
+    to: '/'
+  },
+  {
+    icon: 'mdi-face-woman',
+    title: '顧客管理',
+    to: '/clients'
+  },
+  {
+    icon: 'mdi-briefcase',
+    title: '案件管理',
+    to: '/projects'
+  },
+  {
+    icon: 'mdi-check-bold',
+    title: 'Todo管理',
+    to: '/todo-lists'
+  },
+  {
+    icon: 'mdi-currency-usd',
+    title: '売上管理',
+    to: '/sales'
+  },
+  {
+    icon: 'mdi-poll',
+    title: '売上分析',
+    to: '/analysis'
+  },
+  {
+    icon: 'mdi-account',
+    title: 'ユーザー設定',
+    to: '/mypage'
+  },
 ])
 
 type User = {
@@ -61,18 +89,18 @@ const logout = async () => {
     <v-divider class="border-opacity-25"></v-divider>
     <v-list color="white">
       <v-list-item
-        v-for="([icon, text, to], index) in links"
-        :key="icon"
+        v-for="link in links"
+        :key="link.icon"
         link
         class="text-white"
         router 
-        :to="`${to[index]}`"
+        :to="link.to"
       >
         <template v-slot:prepend>
-          <v-icon>{{ icon }}</v-icon>
+          <v-icon>{{ link.icon }}</v-icon>
         </template>
 
-        <v-list-item-title>{{ text }}</v-list-item-title>
+        <v-list-item-title>{{ link.title }}</v-list-item-title>
       </v-list-item>
       <v-list-item @click="logout()" link>
         <template v-slot:prepend>

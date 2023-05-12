@@ -4,7 +4,9 @@ import Header from '../components/header.vue'
 import axios from '../plugins/axios.js'
 import Axios, { AxiosResponse, AxiosError } from 'axios'
 
-const status = ref(['待機中', '継続中', '終了'])
+const status = ref(['', '待機中', '継続中', '終了'])
+const isDone = ref<boolean>(false)
+const todo = ref([])
 
 type Projects = {
   id: number,
@@ -47,6 +49,20 @@ onMounted(async () => {
       console.log(error)
     })
 })
+
+const isChecked = async (index, todo, title, date) => {
+  todo = todo ? 0 : 1
+  const todo_id = index + 1
+  await axios.put('/api/todo-lists/' + todo_id, {
+    title: title,
+    status: todo,
+    deadline_date: date
+  }).then((res: AxiosResponse) => {
+    console.log(res)
+  }).catch((error: AxiosError) => {
+    console.log(error)
+  })
+}
 </script>
 
 <template>
@@ -56,7 +72,10 @@ onMounted(async () => {
         <v-row>
           <v-col cols="12">
             <v-card>
-              <v-card-title>プロジェクト</v-card-title>
+              <v-card-title class="d-flex justify-space-between">
+                プロジェクト
+                <v-btn color="blue-darken-2" class="mt-1" to="/projects">案件管理へ</v-btn>
+              </v-card-title>
               <v-table>
                 <thead class="">
                   <tr>
@@ -74,7 +93,7 @@ onMounted(async () => {
                     </td>
                     <td>{{ project.project_name }}</td>
                     <td>{{ project.client_name }}</td>
-                    <td>{{  status[project.status] }}</td>
+                    <td>{{ status[project.status] }}</td>
                     <td>{{ project.end_date }}</td>
                   </tr>
                 </tbody>
@@ -83,7 +102,10 @@ onMounted(async () => {
           </v-col>
           <v-col cols="12">
             <v-card class="mt-3">
-              <v-card-title>TODO</v-card-title>
+              <v-card-title class="d-flex justify-space-between">
+                TODO
+                <v-btn color="blue-darken-2" class="mt-1" to="/todo-lists">TODO管理へ</v-btn>
+              </v-card-title>
               <v-table>
                 <thead class="">
                   <tr>
@@ -92,9 +114,10 @@ onMounted(async () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="" v-for="todo_list in todo_lists" :key="todo_list">
-                    <td><v-checkbox hide-details :label="`${todo_list.title}`"></v-checkbox></td>
-                    <td>{{ todo_list.deadline_date }}</td>
+                  <tr v-for="(todo_list, index) in todo_lists" :key="todo_list">
+                    <td :class="{ done: todo[index] }">
+                      <v-checkbox hide-details :label="`${todo_list.title}`" v-model="todo[index]" @click="isChecked(index, todo[index], todo_list.title, todo_list.deadline_date )"></v-checkbox></td>
+                    <td :class="{ done: todo[index] }">{{ todo_list.deadline_date }}</td>
                   </tr>
                 </tbody>
               </v-table>
