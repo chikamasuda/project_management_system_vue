@@ -3,9 +3,10 @@ import { Ref, ref, onMounted } from "vue"
 import Header from '../components/header.vue'
 import axios from '../plugins/axios.js'
 import Axios, { AxiosResponse, AxiosError } from 'axios'
+import dayjs from "dayjs";
+dayjs.locale("ja");
 
 const status = ref(['', '待機中', '継続中', '終了'])
-const isDone = ref<boolean>(false)
 const todo = ref([])
 
 type Projects = {
@@ -63,6 +64,11 @@ const isChecked = async (index, todo, title, date) => {
     console.log(error)
   })
 }
+
+const format = (date) => {
+  let format_date = dayjs(date).format("YYYY/MM/DD")
+  return date ? format_date : ''
+}
 </script>
 
 <template>
@@ -94,7 +100,7 @@ const isChecked = async (index, todo, title, date) => {
                     <td>{{ project.project_name }}</td>
                     <td>{{ project.client_name }}</td>
                     <td>{{ status[project.status] }}</td>
-                    <td>{{ project.end_date }}</td>
+                    <td>{{ format(project.end_date) }}</td>
                   </tr>
                 </tbody>
               </v-table>
@@ -117,7 +123,7 @@ const isChecked = async (index, todo, title, date) => {
                   <tr v-for="(todo_list, index) in todo_lists" :key="todo_list">
                     <td :class="{ done: todo[index] }">
                       <v-checkbox hide-details :label="`${todo_list.title}`" v-model="todo[index]" @click="isChecked(index, todo[index], todo_list.title, todo_list.deadline_date )"></v-checkbox></td>
-                    <td :class="{ done: todo[index] }">{{ todo_list.deadline_date }}</td>
+                    <td :class="{ done: todo[index] }">{{ format(todo_list.deadline_date) }}</td>
                   </tr>
                 </tbody>
               </v-table>
