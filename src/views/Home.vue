@@ -2,8 +2,8 @@
 import { Ref, ref, onMounted } from "vue"
 import Header from '../components/header.vue'
 import axios from '../plugins/axios.js'
-import Axios, { AxiosResponse, AxiosError } from 'axios'
-import dayjs from "dayjs";
+import { AxiosResponse, AxiosError } from 'axios'
+import dayjs from "dayjs"
 dayjs.locale("ja");
 
 const status = ref(['', '待機中', '継続中', '終了'])
@@ -16,28 +16,28 @@ type Projects = {
   end_date: string,
   status: number,
   project_image_url: string | undefined
-}
+}[]
 
-const projects: Ref<Projects> = ref({
+const projects: Ref<Projects> = ref([{
   id: 0,
   status: 0,
   project_name: '',
   client_name: '',
   end_date:'',
   project_image_url: ''
-})
+}])
 
 type TodoLists = {
   id: number,
   title: string,
   deadline_date: string,
-}
+}[]
 
-const todo_lists: Ref<TodoLists> = ref({
+const todo_lists: Ref<TodoLists> = ref([{
   id: 0,
   title: '',
   deadline_date: '',
-})
+}])
 
 onMounted(async () => {
   // ユーザー取得
@@ -51,12 +51,12 @@ onMounted(async () => {
     })
 })
 
-const isChecked = async (index, todo, title, date) => {
-  todo = todo ? 0 : 1
+const isChecked = async (index: number, todo: boolean, title: string, date: string) => {
+  let status = todo ? 0 : 1
   const todo_id = index + 1
   await axios.put('/api/todo-lists/' + todo_id, {
     title: title,
-    status: todo,
+    status: status,
     deadline_date: date
   }).then((res: AxiosResponse) => {
     console.log(res)
@@ -65,7 +65,7 @@ const isChecked = async (index, todo, title, date) => {
   })
 }
 
-const format = (date) => {
+const format = (date: string) => {
   let format_date = dayjs(date).format("YYYY/MM/DD")
   return date ? format_date : ''
 }
@@ -93,7 +93,7 @@ const format = (date) => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="project in projects" :key="project">
+                  <tr v-for="project in projects" :key="project.id">
                     <td>
                       <img :src="`${project.project_image_url}`" class="table-avator mt-2"/>
                     </td>
@@ -120,7 +120,7 @@ const format = (date) => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(todo_list, index) in todo_lists" :key="todo_list">
+                  <tr v-for="(todo_list, index) in todo_lists" :key="todo_list.id">
                     <td :class="{ done: todo[index] }">
                       <v-checkbox hide-details :label="`${todo_list.title}`" v-model="todo[index]" @click="isChecked(index, todo[index], todo_list.title, todo_list.deadline_date )"></v-checkbox></td>
                     <td :class="{ done: todo[index] }">{{ format(todo_list.deadline_date) }}</td>
