@@ -131,3 +131,7 @@ li {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.done {
+  opacity: 0.2;
+}
