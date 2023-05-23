@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Ref, ref, onMounted } from "vue"
-import Header from '../components/header.vue'
 import axios from '../plugins/axios.js'
 import { AxiosResponse, AxiosError } from 'axios'
 import dayjs from "dayjs"
@@ -31,11 +30,13 @@ type TodoLists = {
   id: number,
   title: string,
   deadline_date: string,
+  status: boolean,
 }[]
 
 const todo_lists: Ref<TodoLists> = ref([{
   id: 0,
   title: '',
+  status: false,
   deadline_date: '',
 }])
 
@@ -51,8 +52,10 @@ onMounted(async () => {
     })
 })
 
-const isChecked = async (index: number, todo: boolean, title: string, date: string) => {
-  let status = todo ? 0 : 1
+const isChecked = async (index: number, checkbox_status: boolean, title: string, date: string) => {
+  const done = 1
+  const undone = 0
+  let status = checkbox_status ? done : undone
   const todo_id = index + 1
   await axios.put('/api/todo-lists/' + todo_id, {
     title: title,
@@ -72,7 +75,6 @@ const format = (date: string) => {
 </script>
 
 <template>
-  <Header />
   <v-main>
       <v-container class="py-8 px-6 mt-3" fluid>
         <v-row>
@@ -121,9 +123,9 @@ const format = (date: string) => {
                 </thead>
                 <tbody>
                   <tr v-for="(todo_list, index) in todo_lists" :key="todo_list.id">
-                    <td :class="{ done: todo[index] }">
-                      <v-checkbox hide-details :label="`${todo_list.title}`" v-model="todo[index]" @click="isChecked(index, todo[index], todo_list.title, todo_list.deadline_date )"></v-checkbox></td>
-                    <td :class="{ done: todo[index] }">{{ format(todo_list.deadline_date) }}</td>
+                    <td :class="{ done: todo_lists[index].status }">
+                      <v-checkbox hide-details :label="`${todo_list.title}`" v-model="todo_lists[index].status" @change="isChecked(index, todo_lists[index].status, todo_list.title, todo_list.deadline_date )"></v-checkbox></td>
+                    <td :class="{ done: todo_lists[index].status }">{{ format(todo_list.deadline_date) }}</td>
                   </tr>
                 </tbody>
               </v-table>
