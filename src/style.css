@@ -135,3 +135,12 @@ li {
 .done {
   opacity: 0.2;
 }
+
+.tag-area {
+  width: 30%;
+}
+
+.tag {
+  font-size: 14px;
+  cursor: pointer;
+}

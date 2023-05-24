@@ -10,6 +10,7 @@ type Clients = {
   image_url: string | undefined,
   email: string,
   status: number,
+  tags: Array<string | number>
 }[]
 
 const clients: Ref<Clients> = ref([{
@@ -18,7 +19,7 @@ const clients: Ref<Clients> = ref([{
   name: '',
   image_url: '',
   email: '',
-  status: 0
+  tags: []
 }])
 
 onMounted(async () => {
@@ -57,18 +58,22 @@ onMounted(async () => {
                   <th class="text-left">顧客名</th>
                   <th class="text-left">Eメール</th>
                   <th class="text-left">ステータス</th>
-                  <th class="text-left">タグ</th>
+                  <th class="text-left tag-area">タグ</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="client in clients" :key="client.id">
+                <tr v-for="(client,index) in clients" :key="index">
                   <td>
                     <img :src="`${client.image_url}`" class="table-avator mt-2" />
                   </td>
                   <td>{{ client.name }}</td>
                   <td>{{ client.email }}</td>
                   <td>{{ status[client.status] }}</td>
-                  <td>{{  }}</td>
+                  <td class="d-flex align-center">
+                    <div v-for="tag in clients[index].tags" :key="tag.id">
+                      <span class="mr-2 tag bg-blue-darken-2 pl-2 pr-2 pt-1 pb-1">{{ tag.name }}</span>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </v-table>
