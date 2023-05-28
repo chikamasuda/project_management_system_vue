@@ -10,7 +10,10 @@ type Clients = {
   image_url: string | undefined,
   email: string,
   status: number,
-  tags: Array<string | number>
+  tags: {
+    id: number,
+    name: string,
+  }[]
 }[]
 
 const clients: Ref<Clients> = ref([{
@@ -19,7 +22,10 @@ const clients: Ref<Clients> = ref([{
   name: '',
   image_url: '',
   email: '',
-  tags: []
+  tags: [{
+    id: 0,
+    name: '',
+  }]
 }])
 
 onMounted(async () => {
@@ -49,7 +55,7 @@ onMounted(async () => {
             </v-col>
             <div class="d-flex ml-4 mb-5 mt-2">
               <v-btn color="blue-darken-2" class="mr-3">CSVダウンロード</v-btn>
-              <v-btn color="blue-darken-2" class="">顧客情報作成</v-btn>
+              <v-btn color="blue-darken-2" class="" to="/clients/create">顧客情報登録</v-btn>
             </div>
             <v-table class="mt-3">
               <thead>

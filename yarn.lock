@@ -292,6 +292,11 @@ brace-expansion@^2.0.1:
   dependencies:
     balanced-match "^1.0.0"
 
+click-outside-vue3@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/click-outside-vue3/-/click-outside-vue3-4.0.1.tgz#81a6ac01696b301764b42db6fdbdf28e7cd8ef95"
+  integrity sha512-sbplNecrup5oGqA3o4bo8XmvHRT6q9fvw21Z67aDbTqB9M6LF7CuYLTlLvNtOgKU6W3zst5H5zJuEh4auqA34g==
+
 combined-stream@^1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"
@@ -542,6 +547,13 @@ vue-tsc@^1.2.0:
   dependencies:
     "@volar/vue-language-core" "1.2.0"
     "@volar/vue-typescript" "1.2.0"
+
+vue3-tags-input@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/vue3-tags-input/-/vue3-tags-input-1.0.11.tgz#28c5f37f971cbf186b76a4cad1267ad6dbb7377f"
+  integrity sha512-ZuaYyZLga5Ru58kS3K8pKzorPcJEthdmqT5PE2cRRiIMNZ+tgIwkpHq+keU2aPDRpg7PJ4w5zo8i+APOjs6G8A==
+  dependencies:
+    click-outside-vue3 "^4.0.1"
 
 vue@^3.2.47:
   version "3.2.47"

@@ -91,15 +91,13 @@ const logout = async () => {
       <v-list-item
         v-for="link in links"
         :key="link.icon"
-        link
-        class="text-white"
-        router 
         :to="link.to"
+        router
+        class="text-white" 
       >
         <template v-slot:prepend>
           <v-icon>{{ link.icon }}</v-icon>
         </template>
-
         <v-list-item-title>{{ link.title }}</v-list-item-title>
       </v-list-item>
       <v-list-item @click="logout()" link>

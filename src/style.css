@@ -144,3 +144,8 @@ li {
   font-size: 14px;
   cursor: pointer;
 }
+
+.link-text {
+  text-decoration: underline;
+  cursor: pointer;
+}

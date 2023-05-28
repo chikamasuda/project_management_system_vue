@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
-import Client from '../views/Client/index.vue'
+import ClientIndex from '../views/Client/index.vue'
+import ClientCreate from '../views/Client/create.vue'
 import cookie from 'vue-cookie'
 import { NavigationGuardNext, RouteLocationNormalized, RouteRecordNormalized } from 'vue-router'
 
@@ -34,8 +35,13 @@ const routes = [
   },
   {
     path: '/clients',
-    name: 'Client',
-    component: Client
+    name: 'ClientIndex',
+    component: ClientIndex
+  },
+  {
+    path: '/clients/create',
+    name: 'ClientCreate',
+    component: ClientCreate
   },
 ];
 
