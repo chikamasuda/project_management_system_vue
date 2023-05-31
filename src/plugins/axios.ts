@@ -26,7 +26,6 @@ axiosInstance.interceptors.request.use(config => {
   // クッキーからトークンを取り出してヘッダーに添付する
   const token = 'Bearer ' + cookie.get('user_token')
   config.headers.Authorization = `${token}`
-  console.log(token)
   return config
 }), function (error: AxiosError) {
     return Promise.reject(error)

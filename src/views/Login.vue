@@ -22,7 +22,6 @@ const login = async () => {
     password.value = ""
     cookie.set('user_token', JSON.parse(res.data.token)['access_token'], 30)
     localStorage.setItem('user_token', JSON.parse(res.data.token)['access_token'])
-    console.log(res)
     router.push('/')
   }).catch((error) => {
     console.log(error)

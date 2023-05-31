@@ -28,9 +28,3 @@ const tab = ref('')
     </v-card>
   </div>
 </template>
-
-<style scoped>
-#app {
-  margin: auto;
-}
-</style>

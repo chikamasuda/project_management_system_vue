@@ -1,17 +1,13 @@
 <script setup lang="ts">
 import { Ref, ref, onMounted } from "vue"
 import axios from '../plugins/axios.js'
-import { useRouter } from 'vue-router'
-import Axios, { AxiosResponse, AxiosError } from 'axios';
+import { useRouter, useRoute } from 'vue-router'
+import Axios, { AxiosResponse, AxiosError } from 'axios'
 
+const route = useRoute()
 const router = useRouter()
 const drawer = ref<boolean>(true)
 const links = ref([
-  {
-    icon: 'mdi-home',
-    title: 'ホーム',
-    to: '/'
-  },
   {
     icon: 'mdi-face-woman',
     title: '顧客管理',
@@ -76,6 +72,12 @@ const logout = async () => {
       console.log(error)
     })
 }
+
+const routeCheck = (link: string) => {
+  if(route.path.includes(link)) {
+    return true
+  }
+}
 </script>
 
 <template>
@@ -87,25 +89,23 @@ const logout = async () => {
       <div>{{  user.name }}</div>
     </v-sheet>
     <v-divider class="border-opacity-25"></v-divider>
-    <v-list color="white">
+    <v-list>
+      <v-list-item router link to="/">
+        <template v-slot:prepend><v-icon>mdi-home</v-icon></template>
+        <v-list-item-title>ホーム</v-list-item-title>
+      </v-list-item>
       <v-list-item
         v-for="link in links"
         :key="link.icon"
-        link
-        class="text-white"
-        router 
         :to="link.to"
+        router
+        :class="{'v-list-item--active': routeCheck(link.to)}"
       >
-        <template v-slot:prepend>
-          <v-icon>{{ link.icon }}</v-icon>
-        </template>
-
+        <template v-slot:prepend><v-icon>{{ link.icon }}</v-icon></template>
         <v-list-item-title>{{ link.title }}</v-list-item-title>
       </v-list-item>
       <v-list-item @click="logout()" link>
-        <template v-slot:prepend>
-            <v-icon>mdi-exit-to-app</v-icon>
-        </template>
+        <template v-slot:prepend><v-icon>mdi-exit-to-app</v-icon></template>
         <v-list-item-title>ログアウト</v-list-item-title>
       </v-list-item>
     </v-list>
