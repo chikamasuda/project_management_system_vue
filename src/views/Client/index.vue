@@ -77,7 +77,7 @@ onMounted(async () => {
                   <td>{{ status[client.status] }}</td>
                   <td class="d-flex align-center">
                     <div v-for="tag in clients[index].tags" :key="tag.id">
-                      <span class="mr-2 tag bg-blue-darken-2 pl-2 pr-2 pt-1 pb-1">{{ tag.name }}</span>
+                      <span class="mr-1 tag bg-blue-darken-2 pl-2 pr-2 pt-1 pb-1">{{ tag.name }}</span>
                     </div>
                   </td>
                 </tr>
