@@ -173,3 +173,17 @@ li {
 input[type="file"] {
   display: none;
 }
+
+.error {
+  color: red
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 1.3s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}

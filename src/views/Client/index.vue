@@ -3,6 +3,10 @@ import { Ref, ref, onMounted } from "vue"
 import axios from '../../plugins/axios.js'
 import { AxiosResponse, AxiosError } from 'axios'
 const status = ref(['', '待機中', '継続中', '終了'])
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const createAlert = ref<boolean>(false)
 
 type Clients = {
   id: number,
@@ -37,6 +41,13 @@ onMounted(async () => {
     }).catch((error: AxiosError) => {
       console.log(error)
     })
+
+    if (route.query.type == 'create') {
+      createAlert.value = true
+      setTimeout(() => {
+        createAlert.value = false;
+      }, 2000);
+    }
 })
 </script>
 
@@ -45,6 +56,10 @@ onMounted(async () => {
     <v-container class="py-8 px-6 mt-3" fluid>
       <v-row>
         <v-col cols="12">
+          <transition>
+            <v-alert class="mb-5" v-show="createAlert" type="info" title="登録が完了しました。">
+            </v-alert>
+          </transition>
           <v-card>
             <v-card-title>
               顧客一覧
@@ -65,6 +80,7 @@ onMounted(async () => {
                   <th class="text-left">Eメール</th>
                   <th class="text-left">ステータス</th>
                   <th class="text-left tag-area">タグ</th>
+                  <th class="text-left"></th>
                 </tr>
               </thead>
               <tbody>
@@ -80,6 +96,7 @@ onMounted(async () => {
                       <span class="mr-1 tag bg-blue-darken-2 pl-2 pr-2 pt-1 pb-1">{{ tag.name }}</span>
                     </div>
                   </td>
+                  <td></td>
                 </tr>
               </tbody>
             </v-table>

@@ -3,25 +3,64 @@ import { ref } from "vue"
 import axios from '../../plugins/axios.js'
 import { AxiosResponse, AxiosError } from 'axios'
 import Vue3TagsInput from 'vue3-tags-input';
+import { useRouter } from 'vue-router'
 
-const status_list = ref(['選択してください','待機中','継続中', '終了'])
+const status_list = ['選択してください','待機中','継続中', '終了']
 const tags = ref(['PHP', 'Vue'])
 const previewUrl = ref() // プレビュー用URL
-const uploadRef = ref()  // input['file']用ref
-const imageFile = ref()  // ファイル情報
+const uploadRef = ref([])  // input['file']用ref
+const imageFile = ref<string|Blob|undefined>()  // ファイル情報
+const name = ref<string>()
+const email = ref<string>()
+const address = ref<string>()
+const status = ref<string>()
+const url = ref<string>()
+const memo = ref<string>()
+const router = useRouter()
+const validationError = ref([])
 
 //プレビュー表示
 const setPreviewUrl = () => {
   const file = uploadRef.value.files[0]
   imageFile.value = file
   previewUrl.value = URL.createObjectURL(file)
-  uploadRef.value.value = ''
+  uploadRef.value = []
 }
 
 // 画像削除処理
 const deleteUserImage = () => {
   previewUrl.value = ''
-  imageFile.value = null
+  imageFile.value = ''
+}
+
+const createClient = async () => {
+  const file = imageFile.value ? imageFile.value : null
+  const formData = new FormData()
+  Object.keys(tags.value).forEach(key => {
+    formData.append('tags[]', tags.value[key]);
+  });
+  const status_index = status_list.indexOf(status.value)
+  if (name.value) formData.append('name', name.value)
+  if (email.value) formData.append('email',email.value)
+  if (status_index != -1 && status_index != 0) formData.append('status', status_index)
+  if (url.value) formData.append('site_url', url.value)
+  if (file) formData.append('image', file)
+  if (memo.value) formData.append('memo',memo.value)
+  const config = {
+    header: {
+      "Content-Type": "multipart/form-data",
+    },
+  }
+
+  await axios.post('/api/clients', formData, config)
+    .then((res: AxiosResponse) => {
+      console.log(res)
+      router.push('/clients?type=create')
+    
+    }).catch((error: AxiosError) => {
+      console.log(error)
+      validationError.value = error.response.data.data.errors
+    })
 }
 </script>
 
@@ -36,17 +75,26 @@ const deleteUserImage = () => {
                 <v-btn size="small" color="blue-darken-2" class="mt-1" to="/clients">一覧に戻る</v-btn>
             </v-card-title>
             <v-col cols="6" class="ml-1">
+              <div class="mb-3" v-if="validationError">
+                <ul v-for="errors in validationError">
+                  <li>
+                    <ul v-for="error in errors">
+                      <li class="error">・{{ error }}</li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
               <v-label class="">画像</v-label>
               <v-sheet class="mb-3 mt-3 d-flex align-center">
                 <div>
-                  <v-avatar size="128" placeholder="No Image">
+                  <v-avatar size="128">
                     <img v-if="previewUrl" :src="previewUrl" alt="プレビュー">
                     <img v-else src="../../assets/icon/no_image.svg" alt="プロフィール画像">
                   </v-avatar>
                 </div>
                 <div class="ml-3 text-center">
                 <label class="file-label" color="blue-darken-2">
-                  <input type="file" name="avatar" ref="uploadRef"
+                  <input type="file" ref="uploadRef"
                   @change="setPreviewUrl">
                   画像をアップロード
                 </label>
@@ -55,23 +103,23 @@ const deleteUserImage = () => {
               </v-sheet>
               <div class="mb-4">
                 <v-label class="mb-1">名前</v-label>
-                <v-text-field density="compact" variant="solo" single-line hide-detail></v-text-field>
+                <v-text-field v-model="name" density="compact" variant="solo" single-line hide-detail></v-text-field>
               </div>
               <div class="mb-4">
                 <v-label class="mb-1">Email</v-label>
-                <v-text-field density="compact" variant="solo" single-line hide-detail></v-text-field>
+                <v-text-field v-model="email" density="compact" variant="solo" single-line hide-detail></v-text-field>
               </div>
               <div class="mb-4">
                 <v-label class="mb-1">住所</v-label>
-                <v-text-field density="compact" variant="solo" single-line hide-detail></v-text-field>
+                <v-text-field v-model="address" density="compact" variant="solo" single-line hide-detail></v-text-field>
               </div>
               <div class="mb-4">
                 <v-label class="mb-1">ステータス</v-label>
-                <v-select density="compact" variant="solo" single-line hide-detail :items="status_list" label="選択してください"></v-select>
+                <v-select v-model="status" density="compact" variant="solo" single-line hide-detail :items="status_list" label="選択してください"></v-select>
               </div>
               <div class="mb-4">
                 <v-label class="mb-1">URL</v-label>
-                <v-text-field density="compact" variant="solo" single-line hide-detail></v-text-field>
+                <v-text-field v-model="url" density="compact" variant="solo" single-line hide-detail></v-text-field>
               </div>
               <div class="mb-4">
                 <v-label class="mb-1">タグ作成</v-label>
@@ -79,9 +127,9 @@ const deleteUserImage = () => {
               </div>
               <div class="mb-4">
                 <v-label class="mb-1">メモ</v-label>
-                <v-textarea density="compact" variant="solo" single-line hide-detail></v-textarea>
+                <v-textarea v-model="memo" density="compact" variant="solo" single-line hide-detail></v-textarea>
               </div>
-              <v-btn class="mt-3 pl-5 pr-5 mb-3" color="blue-darken-2">　　登録　　</v-btn>
+              <v-btn class="mt-3 pl-5 pr-5 mb-3" color="blue-darken-2" @click="createClient()">　　登録　　</v-btn>
             </v-col>
           </v-card>
         </v-col>
