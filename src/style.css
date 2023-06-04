@@ -139,8 +139,10 @@ li {
 
 .tag {
   font-size: 14px;
-  cursor: pointer;
   border-radius: 5px;
+  border:1px solid #1976D2 !important;
+  color: #1976D2 !important;
+  cursor: pointer;
 }
 
 .link-text {
@@ -186,4 +188,8 @@ input[type="file"] {
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
+}
+
+.v-icon {
+  cursor: pointer;
 }

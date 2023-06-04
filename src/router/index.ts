@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import ClientIndex from '../views/Client/index.vue'
 import ClientCreate from '../views/Client/create.vue'
+import ClientEdit from '../views/Client/edit.vue'
 import cookie from 'vue-cookie'
 import { NavigationGuardNext, RouteLocationNormalized, RouteRecordNormalized } from 'vue-router'
 
@@ -42,6 +43,11 @@ const routes = [
     path: '/clients/create',
     name: 'ClientCreate',
     component: ClientCreate
+  },
+  {
+    path: '/clients/edit/:client_id',
+    name: 'ClientEdit',
+    component: ClientEdit
   },
 ];
 

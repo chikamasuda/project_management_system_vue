@@ -4,9 +4,13 @@ import axios from '../../plugins/axios.js'
 import { AxiosResponse, AxiosError } from 'axios'
 const status = ref(['', '待機中', '継続中', '終了'])
 import { useRoute } from 'vue-router'
+import DialogCard from '../../components/DialogCard.vue'
 
 const route = useRoute()
 const createAlert = ref<boolean>(false)
+const editAlert = ref<boolean>(false)
+const deleteAlert = ref<boolean>(false)
+const dialog = ref<boolean>(false)
 
 type Clients = {
   id: number,
@@ -48,7 +52,29 @@ onMounted(async () => {
         createAlert.value = false;
       }, 2000);
     }
+    if (route.query.type == 'edit') {
+      editAlert.value = true
+      setTimeout(() => {
+        editAlert.value = false;
+      }, 2000);
+    }
 })
+
+const deleteClient = async (id: number) => {
+  await axios.delete('/api/clients/' +id)
+    .then((res: AxiosResponse) => {
+      const findIdx =  clients.value.findIndex((e) => e.id === id)
+      clients.value.splice(findIdx, 1);
+      dialog.value = false
+      deleteAlert.value = true
+      setTimeout(() => {
+        deleteAlert.value = false;
+      }, 2000);
+
+    }).catch((error: AxiosError) => {
+      console.log(error)
+    })
+}
 </script>
 
 <template>
@@ -58,6 +84,14 @@ onMounted(async () => {
         <v-col cols="12">
           <transition>
             <v-alert class="mb-5" v-show="createAlert" type="info" title="登録が完了しました。">
+            </v-alert>
+          </transition>
+          <transition>
+            <v-alert class="mb-5" v-show="editAlert" type="warning" title="編集が完了しました。">
+            </v-alert>
+          </transition>
+          <transition>
+            <v-alert class="mb-5" v-show="deleteAlert" type="error" title="削除が完了しました。">
             </v-alert>
           </transition>
           <v-card>
@@ -93,10 +127,26 @@ onMounted(async () => {
                   <td>{{ status[client.status] }}</td>
                   <td class="d-flex align-center">
                     <div v-for="tag in clients[index].tags" :key="tag.id">
-                      <span class="mr-1 tag bg-blue-darken-2 pl-2 pr-2 pt-1 pb-1">{{ tag.name }}</span>
+                      <v-btn size="small" color="blue-darken-2" variant="outlined" class="mr-1">{{ tag.name }}</v-btn>
                     </div>
                   </td>
-                  <td></td>
+                  <td>
+                    <router-link :to="`clients/edit/${client.id}`">
+                      <v-icon color="blue-darken-2" class="mr-2">mdi-note-edit-outline</v-icon>
+                    </router-link>
+                    <v-icon @click.stop="dialog = true">mdi-trash-can-outline</v-icon>
+                  </td>
+                  <v-dialog class="text-left" v-model="dialog" width="500">
+                    <v-card>
+                      <v-card-title>削除の確認</v-card-title>
+                      <v-card-text>本当に{{ client.name }}を削除しますか？</v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue-darken-3" @click="dialog = false">キャンセル</v-btn>
+                        <v-btn color="blue-darken-3" @click="deleteClient(client.id)">削除</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
                 </tr>
               </tbody>
             </v-table>
