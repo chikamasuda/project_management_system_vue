@@ -11,6 +11,8 @@ const createAlert = ref<boolean>(false)
 const editAlert = ref<boolean>(false)
 const deleteAlert = ref<boolean>(false)
 const dialog = ref<boolean>(false)
+const modalId = ref<number>()
+const modalName = ref<string>()
 
 type Clients = {
   id: number,
@@ -75,6 +77,12 @@ const deleteClient = async (id: number) => {
       console.log(error)
     })
 }
+
+const openModal = (id: number, name: string) => {
+  dialog.value = true
+  modalId.value = id
+  modalName.value = name
+}
 </script>
 
 <template>
@@ -82,6 +90,17 @@ const deleteClient = async (id: number) => {
     <v-container class="py-8 px-6 mt-3" fluid>
       <v-row>
         <v-col cols="12">
+          <v-dialog class="text-left" v-model="dialog" width="500">
+            <v-card>
+              <v-card-title>削除の確認</v-card-title>
+              <v-card-text>本当に{{ modalName }}を削除しますか？</v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue-darken-3" @click="dialog = false">キャンセル</v-btn>
+                <v-btn color="blue-darken-3" @click="deleteClient(modalId)">削除</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
           <transition>
             <v-alert class="mb-5" v-show="createAlert" type="info" title="登録が完了しました。">
             </v-alert>
@@ -119,8 +138,11 @@ const deleteClient = async (id: number) => {
               </thead>
               <tbody>
                 <tr v-for="(client,index) in clients" :key="index">
-                  <td>
+                  <td v-if="client.image_url">
                     <img :src="`${client.image_url}`" class="table-avator mt-2" />
+                  </td>
+                  <td v-if="!client.image_url">
+                    <img src="../../assets/icon/no_image.svg" class="table-avator mt-2" />
                   </td>
                   <td>{{ client.name }}</td>
                   <td>{{ client.email }}</td>
@@ -134,19 +156,8 @@ const deleteClient = async (id: number) => {
                     <router-link :to="`clients/edit/${client.id}`">
                       <v-icon color="blue-darken-2" class="mr-2">mdi-note-edit-outline</v-icon>
                     </router-link>
-                    <v-icon @click.stop="dialog = true">mdi-trash-can-outline</v-icon>
+                    <v-icon @click.stop="openModal(client.id, client.name)">mdi-trash-can-outline</v-icon>
                   </td>
-                  <v-dialog class="text-left" v-model="dialog" width="500">
-                    <v-card>
-                      <v-card-title>削除の確認</v-card-title>
-                      <v-card-text>本当に{{ client.name }}を削除しますか？</v-card-text>
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="blue-darken-3" @click="dialog = false">キャンセル</v-btn>
-                        <v-btn color="blue-darken-3" @click="deleteClient(client.id)">削除</v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
                 </tr>
               </tbody>
             </v-table>
