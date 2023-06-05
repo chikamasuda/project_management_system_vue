@@ -79,13 +79,19 @@ const deleteUserImage = () => {
   imageFile.value = ''
 }
 
+const handleChangeTag = (newTags: Array<string>) => {
+  tags.value = newTags
+}
+
 const editClient = async () => {
   console.log(name.value)
   const file = imageFile.value ? imageFile.value : null
   const formData = new FormData()
-  Object.keys(tags.value).forEach(key => {
-    formData.append('tags[]', tags.value[key]);
-  });
+  if (tags.value) {
+    Object.keys(tags.value).forEach(key => {
+      formData.append('tags[]', tags.value[key])
+    })
+  }
   const status_index = status_list.indexOf(status.value)
   if (name.value) formData.append('name', name.value)
   if (email.value) formData.append('email', email.value)
@@ -172,7 +178,7 @@ const editClient = async () => {
               </div>
               <div class="mb-4">
                 <v-label class="mb-1">タグ作成</v-label>
-                <vue3-tags-input :tags="tags" class="pt-1 pb-1 pl-2" />
+                <vue3-tags-input :tags="tags" @on-tags-changed="handleChangeTag" class="pl-2 pt-1 pb-1" />
               </div>
               <div class="mb-4">
                 <v-label class="mb-1">メモ</v-label>

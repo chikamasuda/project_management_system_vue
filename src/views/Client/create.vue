@@ -6,7 +6,6 @@ import Vue3TagsInput from 'vue3-tags-input';
 import { useRouter } from 'vue-router'
 
 const status_list = ['選択してください','待機中','継続中', '終了']
-const tags = ref(['PHP', 'Vue'])
 const previewUrl = ref() // プレビュー用URL
 const uploadRef = ref([])  // input['file']用ref
 const imageFile = ref<string|Blob|undefined>()  // ファイル情報
@@ -18,6 +17,7 @@ const url = ref<string>()
 const memo = ref<string>()
 const router = useRouter()
 const validationError = ref([])
+const tags = ref(['PHP', 'Vue'])
 
 //プレビュー表示
 const setPreviewUrl = () => {
@@ -33,12 +33,18 @@ const deleteUserImage = () => {
   imageFile.value = ''
 }
 
+const handleChangeTag = (newTags: Array<string>) => {
+  tags.value = newTags
+}
+
 const createClient = async () => {
   const file = imageFile.value ? imageFile.value : null
   const formData = new FormData()
-  Object.keys(tags.value).forEach(key => {
-    formData.append('tags[]', tags.value[key]);
-  });
+  if(tags) {
+    Object.keys(tags.value).forEach(key => {
+      formData.append('tags[]', tags.value[key])
+    })
+  } 
   const status_index = status_list.indexOf(status.value)
   if (name.value) formData.append('name', name.value)
   if (email.value) formData.append('email',email.value)
@@ -123,7 +129,7 @@ const createClient = async () => {
               </div>
               <div class="mb-4">
                 <v-label class="mb-1">タグ作成</v-label>
-                <vue3-tags-input :tags="tags" class="pt-1 pb-1 pl-2" />
+                <vue3-tags-input :tags="tags" @on-tags-changed="handleChangeTag" class="pl-2 pt-1 pb-1" />
               </div>
               <div class="mb-4">
                 <v-label class="mb-1">メモ</v-label>

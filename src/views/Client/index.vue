@@ -13,6 +13,7 @@ const deleteAlert = ref<boolean>(false)
 const dialog = ref<boolean>(false)
 const modalId = ref<number>()
 const modalName = ref<string>()
+const keyword = ref<string>()
 
 type Clients = {
   id: number,
@@ -78,6 +79,29 @@ const deleteClient = async (id: number) => {
     })
 }
 
+const search = async (keyword: string) => {
+  await axios.get('/api/clients/search?keyword=' + keyword)
+    .then((res: AxiosResponse) => {
+      console.log(res)
+      clients.value = res.data.clients
+
+    }).catch((error: AxiosError) => {
+      console.log(error)
+    })
+}
+
+const tagSearch = async (tagName: string) => {
+  keyword.value = tagName
+  await axios.get('/api/clients/search?keyword=' + tagName)
+    .then((res: AxiosResponse) => {
+      console.log(res)
+      clients.value = res.data.clients
+
+    }).catch((error: AxiosError) => {
+      console.log(error)
+    })
+}
+
 const openModal = (id: number, name: string) => {
   dialog.value = true
   modalId.value = id
@@ -118,7 +142,7 @@ const openModal = (id: number, name: string) => {
               顧客一覧
             </v-card-title>
             <v-col cols="3" class="d-flex">
-              <v-text-field class="ml-1" density="compact" variant="solo" label="キーワード検索" single-line hide-detail @click:append-inner="" append-inner-icon="mdi-magnify">
+              <v-text-field v-model="keyword" class="ml-1" density="compact" variant="solo" label="キーワード検索" single-line hide-detail @click:append-inner="search(keyword)" append-inner-icon="mdi-magnify">
               </v-text-field>
             </v-col>
             <div class="d-flex ml-4 mb-5 mt-2">
@@ -149,7 +173,7 @@ const openModal = (id: number, name: string) => {
                   <td>{{ status[client.status] }}</td>
                   <td class="d-flex align-center">
                     <div v-for="tag in clients[index].tags" :key="tag.id">
-                      <v-btn size="small" color="blue-darken-2" variant="outlined" class="mr-1">{{ tag.name }}</v-btn>
+                      <v-btn @click="tagSearch(tag.name)" size="small" color="blue-darken-2" variant="outlined" class="mr-1">{{ tag.name }}</v-btn>
                     </div>
                   </td>
                   <td>
