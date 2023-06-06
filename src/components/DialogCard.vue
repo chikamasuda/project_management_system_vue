@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref } from "vue"
 
-const dialog = ref<boolean>(false)
-const modalId = ref<number>()
-const modalName = ref<string>()
-const emit = defineEmits(['close-modal', 'delete-client'])
-const props = defineProps(['modalName'])
+const emit = defineEmits<{
+  (e: "close-modal"): void
+  (e: "delete-client"): void
+}>()
+type Props = { modalName: string|undefined }
+const props = defineProps<Props>()
 
 const closeModal = () => {
   emit('close-modal')

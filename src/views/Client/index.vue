@@ -14,8 +14,8 @@ const route = useRoute()
 const deleteAlert = ref<boolean>(false)
 const dialog = ref<boolean>(false)
 const modalId = ref<number>()
-const modalName = ref<string>()
-const keyword = ref<string>()
+const modalName = ref<string|undefined>()
+const keyword = ref<string|undefined>()
 
 type Clients = {
   id: number,
@@ -68,7 +68,7 @@ const deleteClient = async () => {
     })
 }
 
-const search = async (keyword: string) => {
+const search = async (keyword: string|undefined) => {
   await axios.get('/api/clients/search?keyword=' + keyword)
     .then((res: AxiosResponse) => {
       console.log(res)
