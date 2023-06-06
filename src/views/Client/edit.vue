@@ -79,10 +79,12 @@ const deleteUserImage = () => {
   imageFile.value = ''
 }
 
+//変更されたタグ情報を取得
 const handleChangeTag = (newTags: Array<string>) => {
   tags.value = newTags
 }
 
+//顧客情報編集
 const editClient = async () => {
   console.log(name.value)
   const file = imageFile.value ? imageFile.value : null

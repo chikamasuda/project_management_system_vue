@@ -5,6 +5,7 @@ import { AxiosResponse, AxiosError } from 'axios'
 const status = ref(['', '待機中', '継続中', '終了'])
 import { useRoute } from 'vue-router'
 import DialogCard from '../../components/DialogCard.vue'
+import saveAs from "file-saver"
 
 const route = useRoute()
 const createAlert = ref<boolean>(false)
@@ -52,14 +53,14 @@ onMounted(async () => {
     if (route.query.type == 'create') {
       createAlert.value = true
       setTimeout(() => {
-        createAlert.value = false;
-      }, 2000);
+        createAlert.value = false
+      }, 2000)
     }
     if (route.query.type == 'edit') {
       editAlert.value = true
       setTimeout(() => {
         editAlert.value = false;
-      }, 2000);
+      }, 2000)
     }
 })
 
@@ -107,6 +108,25 @@ const openModal = (id: number, name: string) => {
   modalId.value = id
   modalName.value = name
 }
+
+const csvDownload = async () => {
+  await axios.get("/api/clients/download", {
+    responseType: "blob",
+  })
+    .then((res: AxiosResponse) => {
+      let mineType = res.headers["content-type"];
+      const now = new Date(); // 現在の日時を元にDateオブジェクトのインスタンス作成
+      let y = now.getFullYear();
+      let m = now.getMonth() + 1;
+      let d = now.getDate();
+      const name = `顧客情報_${y}年${m}月${d}日`
+      const blob = new Blob([res.data], { type: mineType });
+      saveAs(blob, name);
+    })
+    .catch((error: AxiosError) => {
+      console.log(error.message);
+    });
+}
 </script>
 
 <template>
@@ -146,7 +166,7 @@ const openModal = (id: number, name: string) => {
               </v-text-field>
             </v-col>
             <div class="d-flex ml-4 mb-5 mt-2">
-              <v-btn color="blue-darken-2" class="mr-3">CSVダウンロード</v-btn>
+              <v-btn color="blue-darken-2" class="mr-3" @click="csvDownload">CSVダウンロード</v-btn>
               <v-btn color="blue-darken-2" class="" to="/clients/create">顧客情報登録</v-btn>
             </div>
             <v-table class="mt-3">
