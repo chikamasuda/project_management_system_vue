@@ -5,6 +5,7 @@ import { AxiosResponse, AxiosError } from 'axios'
 import Vue3TagsInput from 'vue3-tags-input';
 import { useRouter } from 'vue-router'
 import { useRoute } from 'vue-router'
+import { isGloballyWhitelisted } from "@vue/shared";
 
 const status_list = ['選択してください', '待機中', '継続中', '終了']
 type Clients = {
@@ -116,7 +117,9 @@ const editClient = async () => {
 
     }).catch((error: AxiosError) => {
       console.log(error)
-      validationError.value = error.response.data.data.errors
+      if(error) {
+        validationError.value = error.response.data.data.errors
+      }
     })
 }
 </script>
