@@ -5,11 +5,12 @@ import { AxiosResponse, AxiosError } from 'axios'
 const status = ref(['', '待機中', '継続中', '終了'])
 import { useRoute } from 'vue-router'
 import DialogCard from '../../components/DialogCard.vue'
+import CreateAlert from '../../components/CreateAlert.vue'
+import EditAlert from '../../components/EditAlert.vue'
+import DeleteAlert from '../../components/DeleteAlert.vue'
 import saveAs from "file-saver"
 
 const route = useRoute()
-const createAlert = ref<boolean>(false)
-const editAlert = ref<boolean>(false)
 const deleteAlert = ref<boolean>(false)
 const dialog = ref<boolean>(false)
 const modalId = ref<number>()
@@ -49,25 +50,12 @@ onMounted(async () => {
     }).catch((error: AxiosError) => {
       console.log(error)
     })
-
-    if (route.query.type == 'create') {
-      createAlert.value = true
-      setTimeout(() => {
-        createAlert.value = false
-      }, 2000)
-    }
-    if (route.query.type == 'edit') {
-      editAlert.value = true
-      setTimeout(() => {
-        editAlert.value = false;
-      }, 2000)
-    }
 })
 
-const deleteClient = async (id: number) => {
-  await axios.delete('/api/clients/' +id)
+const deleteClient = async () => {
+  await axios.delete('/api/clients/' + modalId.value)
     .then((res: AxiosResponse) => {
-      const findIdx =  clients.value.findIndex((e) => e.id === id)
+      const findIdx =  clients.value.findIndex((e) => e.id === modalId.value)
       clients.value.splice(findIdx, 1);
       dialog.value = false
       deleteAlert.value = true
@@ -103,17 +91,12 @@ const tagSearch = async (tagName: string) => {
     })
 }
 
-const openModal = (id: number, name: string) => {
-  dialog.value = true
-  modalId.value = id
-  modalName.value = name
-}
-
 const csvDownload = async () => {
   await axios.get("/api/clients/download", {
     responseType: "blob",
   })
     .then((res: AxiosResponse) => {
+      console.log(res)
       let mineType = res.headers["content-type"];
       const now = new Date(); // 現在の日時を元にDateオブジェクトのインスタンス作成
       let y = now.getFullYear();
@@ -127,6 +110,16 @@ const csvDownload = async () => {
       console.log(error.message);
     });
 }
+
+const openModal = (id: number, name: string) => {
+  dialog.value = true
+  modalId.value = id
+  modalName.value = name
+}
+
+const closeModal = () => {
+  dialog.value = false
+}
 </script>
 
 <template>
@@ -134,29 +127,10 @@ const csvDownload = async () => {
     <v-container class="py-8 px-6 mt-3" fluid>
       <v-row>
         <v-col cols="12">
-          <v-dialog class="text-left" v-model="dialog" width="500">
-            <v-card>
-              <v-card-title>削除の確認</v-card-title>
-              <v-card-text>本当に{{ modalName }}を削除しますか？</v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue-darken-3" @click="dialog = false">キャンセル</v-btn>
-                <v-btn color="blue-darken-3" @click="deleteClient(modalId)">削除</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-          <transition>
-            <v-alert class="mb-5" v-show="createAlert" type="info" title="登録が完了しました。">
-            </v-alert>
-          </transition>
-          <transition>
-            <v-alert class="mb-5" v-show="editAlert" type="warning" title="編集が完了しました。">
-            </v-alert>
-          </transition>
-          <transition>
-            <v-alert class="mb-5" v-show="deleteAlert" type="error" title="削除が完了しました。">
-            </v-alert>
-          </transition>
+          <DialogCard v-model="dialog" :modalName="modalName" @close-modal="closeModal" @delete-client="deleteClient" />
+          <CreateAlert />
+          <EditAlert />
+          <DeleteAlert v-show="deleteAlert" />
           <v-card>
             <v-card-title>
               顧客一覧
