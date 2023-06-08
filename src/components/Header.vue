@@ -83,7 +83,10 @@ const routeCheck = (link: string) => {
 <template>
   <v-navigation-drawer color="blue-darken-3" v-model="drawer" clipped>
     <v-sheet color="blue-darken-3" class="pa-4 text-center">
-      <v-avatar class="mb-4" color="grey-lighten-4" size="64">
+      <v-avatar v-if="user.image_url" class="mb-4" color="grey-lighten-4" size="64">
+        <img :src="user.image_url" class="avator"/>
+      </v-avatar>
+      <v-avatar v-else class="mb-4" color="grey-lighten-4" size="64">
         <img :src="user.image_url" class="avator"/>
       </v-avatar>
       <div>{{  user.name }}</div>
