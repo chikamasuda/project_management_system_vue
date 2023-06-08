@@ -31,7 +31,7 @@ const clients: Ref<Clients> = ref([{
   }]
 }])
 const previewUrl = ref() // プレビュー用URL
-const uploadRef = ref([])  // input['file']用ref
+const uploadRef = ref([]) as Ref // input['file']用ref
 const imageFile = ref<string | Blob | undefined>()  // ファイル情報
 const name = ref<string>()
 const email = ref<string>()
@@ -41,7 +41,7 @@ const site_url = ref<string>()
 const memo = ref<string>()
 const router = useRouter()
 const route = useRoute()
-const tags = ref([])
+const tags = ref([]) as Ref
 const validationError = ref([])
 
 onMounted(async () => {
@@ -55,9 +55,9 @@ onMounted(async () => {
       status.value = status_list[res.data.client.status]
       site_url.value = res.data.client.site_url
       previewUrl.value = res.data.client.image_url
-      const tag_array = res.data.client.tags
-      tag_array.forEach(function (tag: object) {
-        tags.value.push(tag.name)
+      const tag_array: string[] = res.data.client.tags
+      tag_array.forEach(function (tag: string): void {
+        tags.value.push(tag)
       });
       memo.value = res.data.client.memo
     }).catch((error: AxiosError) => {
@@ -94,15 +94,15 @@ const editClient = async () => {
       formData.append('tags[]', tags.value[key])
     })
   }
-  const status_index = status_list.indexOf(status.value)
+  const status_index = status_list.indexOf(status.value as string)
   if (name.value) formData.append('name', name.value)
   if (email.value) formData.append('email', email.value)
-  if (status_index != -1 && status_index != 0) formData.append('status', status_index)
+  if (status_index != -1 && status_index != 0) formData.append('status', status_index as unknown as string)
   if (site_url.value) formData.append('site_url', site_url.value)
   if (imageFile.value) formData.append('image', imageFile.value)
   if (!imageFile.value && previewUrl.value) formData.append('image_url', previewUrl.value)
   if (memo.value) formData.append('memo', memo.value)
-  const config = {
+  const config: object = {
     header: {
       "Content-Type": "multipart/form-data",
       'X-HTTP-Method-Override': 'PUT'
@@ -114,7 +114,7 @@ const editClient = async () => {
       console.log(res)
       router.push('/clients?type=edit')
 
-    }).catch((error: AxiosError) => {
+    }).catch((error) => {
       console.log(error)
       if(error) {
         validationError.value = error.response.data.data.errors

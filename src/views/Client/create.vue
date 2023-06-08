@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, Ref } from "vue"
 import axios from '../../plugins/axios.js'
 import { AxiosResponse, AxiosError } from 'axios'
 import Vue3TagsInput from 'vue3-tags-input';
@@ -7,17 +7,17 @@ import { useRouter } from 'vue-router'
 
 const status_list = ['選択してください','待機中','継続中', '終了']
 const previewUrl = ref() // プレビュー用URL
-const uploadRef = ref([])  // input['file']用ref
+const uploadRef = ref([]) as Ref  // input['file']用ref
 const imageFile = ref<string|Blob|undefined>()  // ファイル情報
 const name = ref<string>()
 const email = ref<string>()
 const address = ref<string>()
-const status = ref<number>()
+const status = ref()
 const url = ref<string>()
 const memo = ref<string>()
 const router = useRouter()
 const validationError = ref([])
-const tags = ref(['PHP', 'Vue'])
+const tags = ref(['PHP', 'Vue']) as Ref
 
 //プレビュー表示
 const setPreviewUrl = () => {
@@ -45,14 +45,15 @@ const createClient = async () => {
       formData.append('tags[]', tags.value[key])
     })
   } 
-  const status_index = status_list.indexOf(status.value)
+  const status_index = status_list.indexOf(status.value as string)
   if (name.value) formData.append('name', name.value)
   if (email.value) formData.append('email',email.value)
-  if (status_index != -1 && status_index != 0) formData.append('status', status_index)
+  if (status_index != -1 && status_index != 0) formData.append('status', status_index as unknown as string)
   if (url.value) formData.append('site_url', url.value)
   if (file) formData.append('image', file)
   if (memo.value) formData.append('memo',memo.value)
-  const config = {
+
+  const config: object = {
     header: {
       "Content-Type": "multipart/form-data",
     },
@@ -63,7 +64,7 @@ const createClient = async () => {
       console.log(res)
       router.push('/clients?type=create')
     
-    }).catch((error: AxiosError) => {
+    }).catch((error) => {
       console.log(error)
       validationError.value = error.response.data.data.errors
     })
