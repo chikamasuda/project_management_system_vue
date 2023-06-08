@@ -10,7 +10,7 @@ const status_list = ['選択してください', '待機中', '継続中', '終�
 type Clients = {
   id: number,
   name: string,
-  image_url: string | undefined,
+  image_url: string|undefined,
   email: string,
   status: number,
   tags: {

@@ -2,15 +2,13 @@
 import { Ref, ref, onMounted } from "vue"
 import axios from '../../plugins/axios.js'
 import { AxiosResponse, AxiosError } from 'axios'
-const status = ref(['', '待機中', '継続中', '終了'])
-import { useRoute } from 'vue-router'
 import DialogCard from '../../components/DialogCard.vue'
 import CreateAlert from '../../components/CreateAlert.vue'
 import EditAlert from '../../components/EditAlert.vue'
 import DeleteAlert from '../../components/DeleteAlert.vue'
 import saveAs from "file-saver"
 
-const route = useRoute()
+const status = ref(['', '待機中', '継続中', '終了'])
 const deleteAlert = ref<boolean>(false)
 const dialog = ref<boolean>(false)
 const modalId = ref<number>()
