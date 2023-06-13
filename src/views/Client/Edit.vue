@@ -28,7 +28,7 @@ const clients: Ref<Clients> = ref([{
   tags: [{
     id: 0,
     name: '',
-  }]
+  }],
 }])
 const previewUrl = ref() // プレビュー用URL
 const uploadRef = ref([]) as Ref // input['file']用ref
@@ -55,9 +55,9 @@ onMounted(async () => {
       status.value = status_list[res.data.client.status]
       site_url.value = res.data.client.site_url
       previewUrl.value = res.data.client.image_url
-      const tag_array: string[] = res.data.client.tags
-      tag_array.forEach(function (tag: string): void {
-        tags.value.push(tag)
+      const tag = ref([{ 'name': '', }])
+      res.data.client.tags.forEach(function (tag) {
+        tags.value.push(tag.name)
       });
       memo.value = res.data.client.memo
     }).catch((error: AxiosError) => {
