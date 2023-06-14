@@ -213,7 +213,7 @@ input[type="file"] {
 .dp__action_cancel {
   color: var(--dp-text-color);
   border: 1px solid var(--dp-border-color);
-  width: 100px;
+  width: 95px;
   padding-bottom: 5px!important;
 }
 
@@ -223,4 +223,8 @@ input[type="file"] {
   width: 50px;
   color: #fff !important;
   padding-bottom: 5px!important;
+}
+
+.dp__button {
+  display: none!important;
 }
