@@ -9,11 +9,17 @@ dayjs.locale("ja")
 import { Chart, ChartData, registerables } from "chart.js"
 import { BarChart } from "vue-chart-3"
 
+type Sales = {
+  month: '',
+  year: '',
+  total_amount: ''
+}[]
 
-const month_format = (month: string) => {
-  let format_month = dayjs(month).format("YYYY年MM月")
-  return month ? format_month : ''
-}
+const sales: Ref<Sales> = ref([{
+  month: '',
+  year: '',
+  total_amount: ''
+}])
 
 let dt = new Date()
 let format_start_date = dayjs(dt).subtract(11, 'month').format("YYYY-MM-DD")
@@ -22,9 +28,10 @@ const start_date = ref<string>(format_start_date)
 const end_date = ref<string>(format_end_date)
 const type = ref<string>('deposit')
 const method = ref<string>('month')
-const sales = ref([])
 const date = ref([])
 const amount = ref([])
+const salesCheck = ref<boolean>(false)
+const message = ref<string>()
 
 Chart.register(...registerables);
 
@@ -32,12 +39,21 @@ const barData: ChartData<"bar"> = {
   labels: date.value,
   datasets: [
     {
-      label: "売上額または入金額",
+      label: "売上額・入金額",
       data: amount.value,
       backgroundColor: "rgb(100,181,246)"
     },
   ],
 };
+
+const month_format = (month: string) => {
+  let format_month = dayjs(month).format("YYYY年MM月")
+  return month ? format_month : ''
+}
+
+const number_format = (number: string) => {
+  return Number(number).toLocaleString()
+}
 
 onMounted(async () => {
   //売上初期表示
@@ -47,14 +63,47 @@ onMounted(async () => {
       sales.value = res.data.analysis
       date.value.length = 0
       amount.value.length = 0
-      sales.value.forEach(function (analysis) {
-        date.value.push(month_format(analysis.month))
-        amount.value.push(analysis.total_amount)
+      sales.value.forEach(function (sale) {
+        date.value.push(month_format(sale.month))
+        amount.value.push(sale.total_amount)
       })
+      if(sales.value.length !== 0) {
+        salesCheck.value = true
+      } else {
+        message.value = "データがありません。"
+      }
     }).catch((error: AxiosError) => {
       console.log(error)
     })
 })
+
+const analysis = async () => {
+  start_date.value = dayjs(start_date.value).format("YYYY-MM-DD")
+  end_date.value = dayjs(end_date.value).format("YYYY-MM-DD")
+  await axios.get(`/api/sales/analysis?type=${type.value}&method=${method.value}&start_date=${start_date.value}&end_date=${end_date.value}`)
+    .then((res: AxiosResponse) => {
+      console.log(res)
+      sales.value = res.data.analysis
+      date.value.length = 0
+      amount.value.length = 0
+      sales.value.forEach(function (sale) {
+        if(method.value == 'month') date.value.push(month_format(sale.month))
+        if(method.value == 'year')  date.value.push(sale.year)
+        amount.value.push(sale.total_amount)
+      })
+      if (sales.value.length === 0) {
+        salesCheck.value = false
+        message.value = "データがありません。"
+      } else {
+        message.value = ""
+        salesCheck.value = true
+      }
+    }).catch((error: AxiosError) => {
+      console.log(error)
+      salesCheck.value = false
+      message.value = "データがありません。"
+    })
+}
 </script>
 
 <template>
@@ -62,7 +111,7 @@ onMounted(async () => {
     <v-container class="py-8 px-6 mt-3" fluid>
       <v-row>
         <v-col cols="12">
-          <v-card class="analysis-card mb-5">
+          <v-card class="analysis-card mb-5 pb-5">
             <v-card-title>
               売上分析
             </v-card-title>
@@ -87,25 +136,27 @@ onMounted(async () => {
                   <span class="mt-1 pr-2 pl-2">〜</span>
                   <Datepicker datePicker class="datepicker" locale="ja" v-model="end_date" select-text="選択" cancel-text="キャンセル" format="yyyy/MM/dd" />
                 </div>
-                <div class="pl-4">
-                  <v-btn color="blue-darken-2" class="mt-4 pl-5 pr-5">分析する</v-btn>
-                </div>
+                <v-btn color="blue-darken-2" class="mt-4 pl-5 pr-5 ml-4" @click="analysis">分析する</v-btn>
               </div>
-              <BarChart :chartData="barData" class="ml-5 mr-5 mt-5" />
-              <v-table class="mt-5 ml-5 mr-5">
-                <thead class="bg-blue-grey-lighten-5">
-                  <tr>
-                    <th class="text-left">年月</th>
-                    <th class="text-left">金額</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="sale in sales">
-                    <td>{{ month_format(sale.month) }}</td>
-                    <td>{{ sale.total_amount  }}</td>
-                  </tr>
-                </tbody>
-              </v-table>
+              <div v-if="salesCheck">
+                <BarChart :chartData="barData" class="ml-5 mr-5 mt-5" />
+                <v-table class="mt-5 ml-5 mr-5">
+                  <thead class="bg-blue-grey-lighten-5">
+                    <tr>
+                      <th class="text-left">年月</th>
+                      <th class="text-left">金額</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="sale in sales">
+                      <td v-if="sale.month">{{ month_format(sale.month) }}</td>
+                      <td v-if="sale.year">{{ sale.year }}年</td>
+                      <td>{{ number_format(sale.total_amount) }}</td>
+                    </tr>
+                  </tbody>
+                </v-table>
+              </div>
+              <div class="error mt-5 ml-5">{{ message }}</div>
           </v-card>
         </v-col>
       </v-row>
