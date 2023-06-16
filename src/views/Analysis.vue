@@ -10,9 +10,9 @@ import { Chart, ChartData, registerables } from "chart.js"
 import { BarChart } from "vue-chart-3"
 
 type Sales = {
-  month: '',
-  year: '',
-  total_amount: ''
+  month: string,
+  year: string,
+  total_amount: string
 }[]
 
 const sales: Ref<Sales> = ref([{
@@ -28,8 +28,8 @@ const start_date = ref<string>(format_start_date)
 const end_date = ref<string>(format_end_date)
 const type = ref<string>('deposit')
 const method = ref<string>('month')
-const date = ref([])
-const amount = ref([])
+const date = ref<string[]>([])
+const amount = ref<string[]>([])
 const salesCheck = ref<boolean>(false)
 const message = ref<string>()
 
@@ -40,7 +40,7 @@ const barData: ChartData<"bar"> = {
   datasets: [
     {
       label: "売上額・入金額",
-      data: amount.value,
+      data: amount.value as unknown as Array<number>,
       backgroundColor: "rgb(100,181,246)"
     },
   ],

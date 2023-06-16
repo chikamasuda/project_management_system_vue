@@ -30,6 +30,12 @@ const clients: Ref<Clients> = ref([{
     name: '',
   }],
 }])
+
+type Tag = {
+  id: number,
+  name: string
+}
+
 const previewUrl = ref() // プレビュー用URL
 const uploadRef = ref([]) as Ref // input['file']用ref
 const imageFile = ref<string | Blob | undefined>()  // ファイル情報
@@ -56,7 +62,7 @@ onMounted(async () => {
       site_url.value = res.data.client.site_url
       previewUrl.value = res.data.client.image_url
       const tag = ref([{ 'name': '', }])
-      res.data.client.tags.forEach(function (tag) {
+      res.data.client.tags.forEach(function (tag: Tag) {
         tags.value.push(tag.name)
       });
       memo.value = res.data.client.memo
