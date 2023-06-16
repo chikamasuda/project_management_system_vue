@@ -2,15 +2,15 @@
 import { Ref, ref, onMounted } from "vue"
 import axios from '../../plugins/axios.js'
 import { AxiosResponse, AxiosError } from 'axios'
-const status = ref(['', '待機中', '継続中', '終了'])
-import { useRoute } from 'vue-router'
 import DialogCard from '../../components/DialogCard.vue'
 import CreateAlert from '../../components/CreateAlert.vue'
 import EditAlert from '../../components/EditAlert.vue'
 import DeleteAlert from '../../components/DeleteAlert.vue'
 import saveAs from "file-saver"
+import dayjs from "dayjs"
+dayjs.locale("ja");
 
-const route = useRoute()
+const status = ref(['', '待機中', '継続中', '終了'])
 const deleteAlert = ref<boolean>(false)
 const dialog = ref<boolean>(false)
 const modalId = ref<number>()
@@ -99,10 +99,8 @@ const csvDownload = async () => {
       console.log(res)
       let mineType = res.headers["content-type"];
       const now = new Date(); // 現在の日時を元にDateオブジェクトのインスタンス作成
-      let y = now.getFullYear();
-      let m = now.getMonth() + 1;
-      let d = now.getDate();
-      const name = `顧客情報_${y}年${m}月${d}日`
+      let format_date = dayjs(now).format("YYYYMMDDHHmmss")
+      const name = `顧客情報_${format_date}`
       const blob = new Blob([res.data], { type: mineType });
       saveAs(blob, name);
     })

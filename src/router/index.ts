@@ -2,9 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
-import ClientIndex from '../views/Client/index.vue'
-import ClientCreate from '../views/Client/create.vue'
-import ClientEdit from '../views/Client/edit.vue'
+import ClientIndex from '../views/Client/Index.vue'
+import ClientCreate from '../views/Client/Create.vue'
+import ClientEdit from '../views/Client/Edit.vue'
+import Analysis from '../views/Analysis.vue'
 import cookie from 'vue-cookie'
 import { NavigationGuardNext, RouteLocationNormalized, RouteRecordNormalized } from 'vue-router'
 
@@ -48,6 +49,11 @@ const routes = [
     path: '/clients/edit/:client_id',
     name: 'ClientEdit',
     component: ClientEdit
+  },
+  {
+    path: '/analysis',
+    name: 'Analysis',
+    component: Analysis
   },
 ];
 

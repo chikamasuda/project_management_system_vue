@@ -10,7 +10,7 @@ const status_list = ['選択してください', '待機中', '継続中', '終�
 type Clients = {
   id: number,
   name: string,
-  image_url: string | undefined,
+  image_url: string|undefined,
   email: string,
   status: number,
   tags: {
@@ -28,8 +28,14 @@ const clients: Ref<Clients> = ref([{
   tags: [{
     id: 0,
     name: '',
-  }]
+  }],
 }])
+
+type Tag = {
+  id: number,
+  name: string
+}
+
 const previewUrl = ref() // プレビュー用URL
 const uploadRef = ref([]) as Ref // input['file']用ref
 const imageFile = ref<string | Blob | undefined>()  // ファイル情報
@@ -55,9 +61,9 @@ onMounted(async () => {
       status.value = status_list[res.data.client.status]
       site_url.value = res.data.client.site_url
       previewUrl.value = res.data.client.image_url
-      const tag_array: string[] = res.data.client.tags
-      tag_array.forEach(function (tag: string): void {
-        tags.value.push(tag)
+      const tag = ref([{ 'name': '', }])
+      res.data.client.tags.forEach(function (tag: Tag) {
+        tags.value.push(tag.name)
       });
       memo.value = res.data.client.memo
     }).catch((error: AxiosError) => {

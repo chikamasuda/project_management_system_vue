@@ -193,3 +193,38 @@ input[type="file"] {
 .v-icon {
   cursor: pointer;
 }
+
+.search-item {
+  height: 40px;
+}
+
+.analysis-card {
+  min-height: 800px;
+}
+
+.search-label {
+  width: 75px;
+}
+
+.datepicker {
+  width: 200px!important;
+}
+
+.dp__action_cancel {
+  color: var(--dp-text-color);
+  border: 1px solid var(--dp-border-color);
+  width: 95px;
+  padding-bottom: 5px!important;
+}
+
+.dp__action_select {
+  background: var(--dp-primary-color);
+  color: var(--dp-primary-text-color);
+  width: 50px;
+  color: #fff !important;
+  padding-bottom: 5px!important;
+}
+
+.dp__button {
+  display: none!important;
+}
