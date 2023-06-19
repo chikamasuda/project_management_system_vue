@@ -9,7 +9,7 @@ const token = 'Bearer ' + cookie.get('user_token')
 let baseURL
 
 if(env === 'production') {
-  baseURL = ''
+  baseURL = 'https://safe-dawn-95610-251e839169ba.herokuapp.com'
 } else {
   baseURL = 'http://localhost'
 }
