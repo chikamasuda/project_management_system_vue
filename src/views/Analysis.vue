@@ -6,8 +6,7 @@ import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import dayjs from "dayjs"
 dayjs.locale("ja")
-import Chart from 'chart.js'
-import registerables from 'chart.js'
+import { Chart as ChartJS, registerables } from 'chart.js'
 import BarChart from 'vue-chart-3'
 
 type Sales = {
@@ -34,7 +33,7 @@ const amount = ref<string[]>([])
 const salesCheck = ref<boolean>(false)
 const message = ref<string>()
 
-Chart.register(...registerables);
+ChartJS.register(...registerables);
 
 const barData = reactive ({
   labels: date.value,
