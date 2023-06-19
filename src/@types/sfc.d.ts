@@ -8,3 +8,6 @@ declare module 'vue-cookie'
 declare module 'vue3-tags-input'
 declare module 'file-saver'
 declare module '@vuepic/vue-datepicker'
+declare module 'chart.js'
+declare module 'vue-chart-3'
+
