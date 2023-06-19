@@ -33,7 +33,11 @@ const amount = ref<string[]>([])
 const salesCheck = ref<boolean>(false)
 const message = ref<string>()
 
+<<<<<<< HEAD
 Chart.register(...registerables);
+=======
+ChartJS.register(...registerables);
+>>>>>>> 6dd79d78dfa47fa7389dfda590ae07324e35e5d9
 
 const barData = reactive ({
   labels: date.value,
