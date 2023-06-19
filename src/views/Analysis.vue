@@ -4,10 +4,10 @@ import axios from '../plugins/axios.js'
 import { AxiosResponse, AxiosError } from 'axios'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
+import { Chart, registerables } from "chart.js"
+import { BarChart } from "vue-chart-3"
 import dayjs from "dayjs"
 dayjs.locale("ja")
-import { ChartData, registerables } from "chart.js"
-import { BarChart } from "vue-chart-3"
 
 type Sales = {
   month: string,
@@ -33,9 +33,9 @@ const amount = ref<string[]>([])
 const salesCheck = ref<boolean>(false)
 const message = ref<string>()
 
-ChartData.register(...registerables);
+Chart.register(...registerables);
 
-const barData: ChartData<"bar"> = {
+const barData = reactive ({
   labels: date.value,
   datasets: [
     {
@@ -44,7 +44,7 @@ const barData: ChartData<"bar"> = {
       backgroundColor: "rgb(100,181,246)"
     },
   ],
-};
+})
 
 const month_format = (month: string) => {
   let format_month = dayjs(month).format("YYYY年MM月")
