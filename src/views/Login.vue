@@ -7,8 +7,7 @@ import cookie from 'vue-cookie'
 const tab = ref<string>('')
 const email = ref<string>('')
 const password = ref<string>('')
-
-const mismatchError = ref<string>('')
+const mismatchError = ref<string>()
 const emailError = ref([])
 const passwordError = ref([])
 const router = useRouter()
@@ -21,11 +20,10 @@ const login = async () => {
     email.value = ""
     password.value = ""
     cookie.set('user_token', JSON.parse(res.data.token)['access_token'], 30)
-    localStorage.setItem('user_token', JSON.parse(res.data.token)['access_token'])
     router.push('/')
   }).catch((error) => {
     console.log(error)
-    if (error.response.status == "401") {
+    if (error.response.data.message == 'Unauthorized') {
       mismatchError.value = 'メールアドレスまたはパスワードに誤りがあります。'
     }
     emailError.value = error.response.data.data.errors['email'];
@@ -37,23 +35,25 @@ const login = async () => {
 <template>
   <div class="auth-container">
     <v-card color="basil" class="auth-card mx-auto">
-      <v-tabs v-model="tab" bg-color="transparent" color="blue-darken-3" grow>
+      <!-- <v-tabs v-model="tab" bg-color="transparent" color="blue-darken-3" grow>
         <v-tab to="/login">ログイン</v-tab>
         <v-tab to="/register">新規登録</v-tab>
-      </v-tabs>
+      </v-tabs> -->
+      <v-card-title class="ml-2">ログイン</v-card-title>
       <v-divider></v-divider>
       <v-tab-item value="login">
         <v-card class="text-center">
           <v-row justify="center" align-content="center">
           <v-col cols="11">
             <v-text-field round label="Eメール" class="mt-5 pb-0 pt-5" variant="solo" v-model="email"></v-text-field>
-            <ul class="error text-left mt-1" v-for="error in emailError">
+            <ul class="error text-left mt-2" v-for="error in emailError">
               <li>{{ error }}</li>
             </ul>
             <v-text-field class="mt-4" type="password" round label="パスワード" variant="solo" v-model="password"></v-text-field>
-            <ul class="error text-left mt-1" v-for="error in passwordError">
+            <ul class="error text-left mt-2" v-for="error in passwordError">
               <li>{{ error }}</li>
             </ul>
+            <div class="error text-left mt-2">{{ mismatchError }}</div>
           </v-col>
           </v-row>
           <v-btn class="text-none mb-5 mt-5" color="blue-darken-1" size="large" @click="login">

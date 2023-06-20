@@ -16,6 +16,7 @@ const dialog = ref<boolean>(false)
 const modalId = ref<number>()
 const modalName = ref<string|undefined>()
 const keyword = ref<string|undefined>()
+const isLoading = ref<boolean>(true)
 
 type Clients = {
   id: number,
@@ -46,6 +47,7 @@ onMounted(async () => {
   await axios.get('/api/clients')
     .then((res: AxiosResponse) => {
       clients.value = res.data.clients
+      isLoading.value = false
       console.log(res)
     }).catch((error: AxiosError) => {
       console.log(error)
@@ -141,7 +143,10 @@ const closeModal = () => {
               <v-btn color="blue-darken-2" class="mr-3" @click="csvDownload">CSVダウンロード</v-btn>
               <v-btn color="blue-darken-2" class="" to="/clients/create">顧客情報登録</v-btn>
             </div>
-            <v-table class="mt-3">
+            <div class="pb-5 mb-5" v-show="isLoading">
+              <div class="loader">Loading.....</div>
+            </div>
+            <v-table class="mt-3" v-show="!isLoading">
               <thead>
                 <tr>
                   <th class="text-left"></th>

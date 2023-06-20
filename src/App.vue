@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import Header from './components/Header.vue'
 import { useRoute } from 'vue-router'
+import { useStoreUser } from "./stores/user"
 
 const route = useRoute()
+const storeUser = useStoreUser()
 
 const routeCheck = () => {
   if(route.name === 'Login') {
@@ -13,13 +15,24 @@ const routeCheck = () => {
     return true
   }
 }
+
+const userCheck = () => {
+  if(storeUser.user) {
+    return true
+  } else {
+    return false
+  }
+}
 </script>
 
 <template>
   <v-app>
-    <div v-if="routeCheck()">
-      <Header />
+    <div v-if="!routeCheck()">
+      <router-view />
     </div>
-    <router-view />
+    <div v-if="routeCheck() && userCheck()">
+      <Header />
+      <router-view />
+    </div>
   </v-app>
 </template>
