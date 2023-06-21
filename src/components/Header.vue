@@ -3,10 +3,13 @@ import { Ref, ref, onMounted } from "vue"
 import axios from '../plugins/axios.js'
 import { useRouter, useRoute } from 'vue-router'
 import Axios, { AxiosResponse, AxiosError } from 'axios'
+import cookie from "vue-cookie";
+import { useStoreUser } from "../stores/user";
 
 const route = useRoute()
 const router = useRouter()
 const drawer = ref<boolean>(true)
+const storeUser = useStoreUser()
 const links = ref([
   {
     icon: 'mdi-face-woman',
@@ -40,33 +43,10 @@ const links = ref([
   },
 ])
 
-type User = {
-  id: number,
-  name: string,
-  email: string,
-  image_url: string | undefined
-};
-const user: Ref<User> = ref({
-  id: 0,
-  name: '',
-  email: '',
-  image_url: ''
-})
-
-onMounted(async () => {
-  // ユーザー取得
-  await axios.get('/api/users')
-    .then((res: AxiosResponse) => {
-      user.value = res.data.user
-      console.log(res)
-    }).catch((error: AxiosError) => {
-      console.log(error)
-    })
-})
-
 const logout = async () => {
   await axios.post('/api/users/logout')
     .then(() => {
+      cookie.delete('user_token')
       router.push('/login')
     }).catch((error: AxiosError) => {
       console.log(error)
@@ -83,13 +63,19 @@ const routeCheck = (link: string) => {
 <template>
   <v-navigation-drawer color="blue-darken-3" v-model="drawer" clipped>
     <v-sheet color="blue-darken-3" class="pa-4 text-center">
-      <v-avatar v-if="user.image_url" class="mb-4" color="grey-lighten-4" size="64">
-        <img :src="user.image_url" class="avator"/>
+      <v-avatar
+        v-if="storeUser.user.image_url"
+        class="mb-4"
+        color="grey-lighten-4"
+        size="64"
+      >
+        <img :src="storeUser.user.image_url" class="avator" />
       </v-avatar>
       <v-avatar v-else class="mb-4" color="grey-lighten-4" size="64">
-        <img :src="user.image_url" class="avator"/>
+        <img src="../assets/icon/no_image.svg" class="avator" />
       </v-avatar>
-      <div>{{  user.name }}</div>
+      <div v-if="storeUser.user.name">{{ storeUser.user.name }}</div>
+      <div v-else><span>ユーザー</span></div>
     </v-sheet>
     <v-divider class="border-opacity-25"></v-divider>
     <v-list>

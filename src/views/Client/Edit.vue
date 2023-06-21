@@ -7,6 +7,8 @@ import { useRouter } from 'vue-router'
 import { useRoute } from 'vue-router'
 
 const status_list = ['選択してください', '待機中', '継続中', '終了']
+const isLoading = ref<boolean>(true)
+
 type Clients = {
   id: number,
   name: string,
@@ -66,6 +68,7 @@ onMounted(async () => {
         tags.value.push(tag.name)
       });
       memo.value = res.data.client.memo
+      isLoading.value = false
     }).catch((error: AxiosError) => {
       console.log(error)
     })
@@ -139,7 +142,10 @@ const editClient = async () => {
               顧客編集
               <v-btn size="small" color="blue-darken-2" class="mt-1" to="/clients">一覧に戻る</v-btn>
             </v-card-title>
-            <v-col cols="6" class="ml-1">
+            <div class="pb-5 mb-5" v-show="isLoading">
+              <div class="loader">Loading.....</div>
+            </div>
+            <v-col cols="6" class="ml-1" v-show="!isLoading">
               <div class="mb-3" v-if="validationError">
                 <ul v-for="errors in validationError">
                   <li>

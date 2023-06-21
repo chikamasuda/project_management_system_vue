@@ -16,10 +16,15 @@ const routeCheck = () => {
 </script>
 
 <template>
+  <div v-if="!routeCheck()">
   <v-app>
-    <div v-if="routeCheck()">
-      <Header />
-    </div>
-    <router-view />
+      <router-view />
   </v-app>
+  </div>
+  <div v-else>
+    <v-app>
+      <Header />
+      <router-view />
+    </v-app>
+  </div>
 </template>

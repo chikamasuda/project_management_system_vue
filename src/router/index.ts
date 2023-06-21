@@ -7,11 +7,12 @@ import ClientCreate from '../views/Client/Create.vue'
 import ClientEdit from '../views/Client/Edit.vue'
 import Analysis from '../views/Analysis.vue'
 import cookie from 'vue-cookie'
+import { useStoreUser } from "../stores/user";
 import { NavigationGuardNext, RouteLocationNormalized, RouteRecordNormalized } from 'vue-router'
 
 //ユーザーが認証されていないときnextでログインページに飛ばす
 const requireAuth = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-  if (!cookie.get('user_token')) {
+  if (useStoreUser().user.length == 0 || !cookie.get('user_token')) {
     next({ name: 'Login' })
   } else {
     next()

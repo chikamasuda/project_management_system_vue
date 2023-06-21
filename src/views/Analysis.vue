@@ -9,6 +9,8 @@ import { BarChart } from "vue-chart-3"
 import dayjs from "dayjs"
 dayjs.locale("ja")
 
+const isLoading = ref<boolean>(true)
+
 type Sales = {
   month: string,
   year: string,
@@ -72,6 +74,7 @@ onMounted(async () => {
       } else {
         message.value = "データがありません。"
       }
+      isLoading.value = false
     }).catch((error: AxiosError) => {
       console.log(error)
     })
@@ -138,7 +141,10 @@ const analysis = async () => {
                 </div>
                 <v-btn color="blue-darken-2" class="mt-4 pl-5 pr-5 ml-4" @click="analysis">分析する</v-btn>
               </div>
-              <div v-if="salesCheck">
+              <div class="pb-5 mb-5" v-show="isLoading">
+                <div class="loader">Loading.....</div>
+              </div>
+              <div v-if="salesCheck" v-show="!isLoading">
                 <BarChart :chartData="barData" class="ml-5 mr-5 mt-5" />
                 <v-table class="mt-5 ml-5 mr-5">
                   <thead class="bg-blue-grey-lighten-5">

@@ -1,8 +1,10 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import './style.css'
 import App from './App.vue'
 import router from './router' 
 import './plugins/axios.js'
+import { createPersistedState } from "pinia-plugin-persistedstate"
 
 // Vuetify
 import 'vuetify/styles'
@@ -23,4 +25,9 @@ const vuetify = createVuetify({
   }
 })
 
-createApp(App).use(router).use(vuetify).mount('#app')
+const app = createApp(App)
+app.use(router)
+app.use(createPinia())
+createPinia().use(createPersistedState())
+app.use(vuetify)
+app.mount('#app')
