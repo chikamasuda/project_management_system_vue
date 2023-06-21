@@ -80,8 +80,9 @@ onMounted(async () => {
   await axios
     .get("/api/users")
     .then((res: AxiosResponse) => {
+      console.log(res)
       user.value = res.data.user;
-      storeUser.setUser(user.value)
+      storeUser.user = res.data.user
     })
     .catch((error: AxiosError) => {
       console.log(error);

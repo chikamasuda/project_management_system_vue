@@ -56,17 +56,6 @@ const user: Ref<User> = ref({
   image_url: ''
 })
 
-onMounted(async () => {
-  // ユーザー取得
-  await axios.get('/api/users')
-    .then((res: AxiosResponse) => {
-      user.value = res.data.user
-      console.log(res)
-    }).catch((error: AxiosError) => {
-      console.log(error)
-    })
-})
-
 const logout = async () => {
   await axios.post('/api/users/logout')
     .then(() => {
