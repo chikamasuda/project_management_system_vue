@@ -22,7 +22,6 @@ const user: Ref<User> = ref({
 });
 
 export const useStoreUser = defineStore('user', {
-
   state: () => ({
     user: {} as User,
   }),
@@ -30,5 +29,6 @@ export const useStoreUser = defineStore('user', {
     setUser(data: User) {
       user.value = data
     },
-  }
+  },
+  persist: true,
 });
