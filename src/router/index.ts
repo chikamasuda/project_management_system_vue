@@ -12,7 +12,7 @@ import { NavigationGuardNext, RouteLocationNormalized, RouteRecordNormalized } f
 
 //ユーザーが認証されていないときnextでログインページに飛ばす
 const requireAuth = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-  if (!useStoreUser().user || !cookie.get('user_token')) {
+  if (useStoreUser().user.length == 0 || !cookie.get('user_token')) {
     next({ name: 'Login' })
   } else {
     next()

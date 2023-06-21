@@ -16,13 +16,6 @@ const routeCheck = () => {
   }
 }
 
-const userCheck = () => {
-  if(storeUser.user) {
-    return true
-  } else {
-    return false
-  }
-}
 </script>
 
 <template>
@@ -30,7 +23,7 @@ const userCheck = () => {
     <div v-if="!routeCheck()">
       <router-view />
     </div>
-    <div v-if="routeCheck() && userCheck()">
+    <div v-else>
       <Header />
       <router-view />
     </div>

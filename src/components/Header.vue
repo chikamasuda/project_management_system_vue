@@ -43,19 +43,6 @@ const links = ref([
   },
 ])
 
-type User = {
-  id: number,
-  name: string,
-  email: string,
-  image_url: string | undefined
-};
-const user: Ref<User> = ref({
-  id: 0,
-  name: '',
-  email: '',
-  image_url: ''
-})
-
 const logout = async () => {
   await axios.post('/api/users/logout')
     .then(() => {
@@ -87,7 +74,8 @@ const routeCheck = (link: string) => {
       <v-avatar v-else class="mb-4" color="grey-lighten-4" size="64">
         <img src="../assets/icon/no_image.svg" class="avator" />
       </v-avatar>
-      <div v-if="storeUser.user">{{ storeUser.user.name }}</div>
+      <div v-if="storeUser.user.name">{{ storeUser.user.name }}</div>
+      <div v-else><span>ユーザー</span></div>
     </v-sheet>
     <v-divider class="border-opacity-25"></v-divider>
     <v-list>

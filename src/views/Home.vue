@@ -63,6 +63,15 @@ const user: Ref<User> = ref({
 });
 
 onMounted(async () => {
+  // ユーザー取得
+  await axios
+    .get("/api/users")
+    .then((res: AxiosResponse) => {
+      storeUser.user = res.data.user
+    })
+    .catch((error: AxiosError) => {
+      console.log(error);
+    });
   // ホーム情報取得
   await axios
     .get("/api/home/index")
@@ -71,18 +80,6 @@ onMounted(async () => {
       todo_lists.value = res.data.todo_lists
       isLoading.value = false
       console.log(res);
-    })
-    .catch((error: AxiosError) => {
-      console.log(error);
-    });
-
-  // ユーザー取得
-  await axios
-    .get("/api/users")
-    .then((res: AxiosResponse) => {
-      console.log(res)
-      user.value = res.data.user;
-      storeUser.user = res.data.user
     })
     .catch((error: AxiosError) => {
       console.log(error);
