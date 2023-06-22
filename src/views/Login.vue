@@ -39,26 +39,30 @@ const login = async () => {
         <v-tab to="/login">ログイン</v-tab>
         <v-tab to="/register">新規登録</v-tab>
       </v-tabs> -->
-      <v-card-title class="ml-2">ログイン</v-card-title>
-      <v-divider></v-divider>
+      <v-card-title class="ml-2 text-center pt-4 pb-4">ログイン</v-card-title>
       <v-tab-item value="login">
         <v-card class="text-center">
           <v-row justify="center" align-content="center">
-          <v-col cols="11">
-            <v-text-field round label="Eメール" class="mt-5 pb-0 pt-5" variant="solo" v-model="email"></v-text-field>
+          <v-col cols="10">
+            <v-text-field label="Eメール" v-model="email" variant="underlined"></v-text-field>
             <ul class="error text-left mt-2" v-for="error in emailError">
               <li>{{ error }}</li>
             </ul>
-            <v-text-field class="mt-4" type="password" round label="パスワード" variant="solo" v-model="password"></v-text-field>
+            <v-text-field class="mt-4" type="password" label="パスワード" v-model="password" variant="underlined"></v-text-field>
             <ul class="error text-left mt-2" v-for="error in passwordError">
               <li>{{ error }}</li>
             </ul>
             <div class="error text-left mt-2">{{ mismatchError }}</div>
+            <v-btn block class="text-none mt-4" color="blue-darken-1" size="large" @click="login">
+              ログイン
+            </v-btn>
+            <div class="text-left pb-5 pt-4">
+              <v-card-text class="pt-0 pb-0 mb-1 pl-0 font-weight-bold">テストユーザーアカウント</v-card-text>
+              <v-card-text class="pt-0 pb-0 mb-1 pl-0">Eメール：testuser01@gmail.com</v-card-text>
+              <v-card-text class="pt-0 pb-3 pl-0">パスワード：password</v-card-text>
+            </div>
           </v-col>
           </v-row>
-          <v-btn class="text-none mb-5 mt-5" color="blue-darken-1" size="large" @click="login">
-            ログイン
-          </v-btn>
         </v-card>
       </v-tab-item>
     </v-card>

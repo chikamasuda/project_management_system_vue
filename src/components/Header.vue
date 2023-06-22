@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref, onMounted } from "vue"
+import { ref } from "vue"
 import axios from '../plugins/axios.js'
 import { useRouter, useRoute } from 'vue-router'
 import Axios, { AxiosResponse, AxiosError } from 'axios'
@@ -45,7 +45,7 @@ const links = ref([
 
 const logout = async () => {
   await axios.post('/api/users/logout')
-    .then(() => {
+    .then((res: AxiosResponse) => {
       cookie.delete('user_token')
       router.push('/login')
     }).catch((error: AxiosError) => {
@@ -61,14 +61,9 @@ const routeCheck = (link: string) => {
 </script>
 
 <template>
-  <v-navigation-drawer color="blue-darken-3" v-model="drawer" clipped>
-    <v-sheet color="blue-darken-3" class="pa-4 text-center">
-      <v-avatar
-        v-if="storeUser.user.image_url"
-        class="mb-4"
-        color="grey-lighten-4"
-        size="64"
-      >
+  <v-navigation-drawer color="blue-darken-3" v-model="drawer" clipped class="pt-3">
+    <!-- <v-sheet color="blue-darken-3" class="pa-4 text-center">
+      <v-avatar v-if="storeUser.user.image_url" class="mb-4" size="64">
         <img :src="storeUser.user.image_url" class="avator" />
       </v-avatar>
       <v-avatar v-else class="mb-4" color="grey-lighten-4" size="64">
@@ -76,8 +71,8 @@ const routeCheck = (link: string) => {
       </v-avatar>
       <div v-if="storeUser.user.name">{{ storeUser.user.name }}</div>
       <div v-else><span>ユーザー</span></div>
-    </v-sheet>
-    <v-divider class="border-opacity-25"></v-divider>
+    </v-sheet> -->
+    <!-- <v-divider class="border-opacity-25"></v-divider> -->
     <v-list>
       <v-list-item router link to="/">
         <template v-slot:prepend><v-icon>mdi-home</v-icon></template>
@@ -101,6 +96,6 @@ const routeCheck = (link: string) => {
   </v-navigation-drawer>
   <v-app-bar app>
     <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-    <v-toolbar-title class="text-left">案件管理</v-toolbar-title>
+    <v-toolbar-title class="text-left"></v-toolbar-title>
   </v-app-bar>
 </template>

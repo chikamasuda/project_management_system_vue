@@ -124,7 +124,10 @@ const closeModal = () => {
 
 <template>
   <v-main>
-    <v-container class="py-8 px-6 mt-3" fluid>
+    <div class="pb-5 mb-5" v-show="isLoading">
+      <div class="loader">Loading.....</div>
+    </div>
+    <v-container class="py-8 px-6 mt-3" fluid  v-show="!isLoading">
       <v-row>
         <v-col cols="12">
           <DialogCard v-model="dialog" :modalName="modalName" @close-modal="closeModal" @delete-client="deleteClient" />
@@ -142,9 +145,6 @@ const closeModal = () => {
             <div class="d-flex ml-4 mb-5 mt-2">
               <v-btn color="blue-darken-2" class="mr-3" @click="csvDownload">CSVダウンロード</v-btn>
               <v-btn color="blue-darken-2" class="" to="/clients/create">顧客情報登録</v-btn>
-            </div>
-            <div class="pb-5 mb-5" v-show="isLoading">
-              <div class="loader">Loading.....</div>
             </div>
             <v-table class="mt-3" v-show="!isLoading">
               <thead>

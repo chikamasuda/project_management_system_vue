@@ -118,7 +118,10 @@ const format = (date: string) => {
 
 <template>
   <v-main>
-    <v-container class="py-8 px-6 mt-3" fluid>
+    <div class="pb-5 mb-5" v-show="isLoading">
+      <div class="loader">Loading.....</div>
+    </div>
+    <v-container class="py-8 px-6 mt-3" fluid v-show="!isLoading">
       <v-row>
         <v-col cols="12">
           <v-card>
@@ -128,9 +131,6 @@ const format = (date: string) => {
                 >案件管理へ</v-btn
               >
             </v-card-title>
-            <div class="pb-5 mb-5" v-show="isLoading">
-              <div class="loader">Loading.....</div>
-            </div>
             <v-table v-show="!isLoading">
               <thead class="">
                 <tr>
@@ -166,9 +166,6 @@ const format = (date: string) => {
                 >TODO管理へ</v-btn
               >
             </v-card-title>
-            <div class="pb-5 mb-5" v-show="isLoading">
-              <div class="loader">Loading.....</div>
-            </div>
             <v-table v-show="!isLoading">
               <thead class="">
                 <tr>
