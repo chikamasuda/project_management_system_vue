@@ -17,7 +17,7 @@ const url = ref<string>()
 const memo = ref<string>()
 const router = useRouter()
 const validationError = ref([])
-const tags = ref(['PHP', 'Vue']) as Ref
+const tags = ref([]) as Ref
 
 //プレビュー表示
 const setPreviewUrl = () => {
