@@ -3,6 +3,7 @@ import { Ref, ref, onMounted, reactive } from "vue"
 import axios from '../plugins/axios.js'
 import { AxiosResponse, AxiosError } from 'axios'
 import Datepicker from '@vuepic/vue-datepicker'
+import Loading from "../components/Loading.vue"
 import '@vuepic/vue-datepicker/dist/main.css'
 import { Chart, registerables } from "chart.js"
 import { BarChart } from "vue-chart-3"
@@ -41,7 +42,7 @@ const barData = reactive ({
   labels: date.value,
   datasets: [
     {
-      label: "売上額・入金額",
+      label: "金額",
       data: amount.value as unknown as Array<number>,
       backgroundColor: "rgb(100,181,246)"
     },
@@ -141,9 +142,7 @@ const analysis = async () => {
                 </div>
                 <v-btn color="blue-darken-2" class="mt-4 pl-5 pr-5 ml-4" @click="analysis">分析する</v-btn>
               </div>
-              <div class="pb-5 mb-5" v-show="isLoading">
-                <div class="loader">Loading.....</div>
-              </div>
+              <Loading v-show="isLoading"></Loading>
               <div v-if="salesCheck" v-show="!isLoading">
                 <BarChart :chartData="barData" class="ml-5 mr-5 mt-5" />
                 <v-table class="mt-5 ml-5 mr-5">

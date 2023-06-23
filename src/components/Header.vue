@@ -10,6 +10,7 @@ const route = useRoute()
 const router = useRouter()
 const drawer = ref<boolean>(true)
 const storeUser = useStoreUser()
+const title = ref<string>()
 const links = ref([
   {
     icon: 'mdi-face-woman',
@@ -58,11 +59,15 @@ const routeCheck = (link: string) => {
     return true
   }
 }
+
+const setTitle = (linkTitle: string) => {
+  title.value = linkTitle
+}
 </script>
 
 <template>
   <v-navigation-drawer color="blue-darken-3" v-model="drawer" clipped class="pt-3">
-    <!-- <v-sheet color="blue-darken-3" class="pa-4 text-center">
+    <v-sheet color="blue-darken-3" class="pa-4 text-center">
       <v-avatar v-if="storeUser.user.image_url" class="mb-4" size="64">
         <img :src="storeUser.user.image_url" class="avator" />
       </v-avatar>
@@ -71,8 +76,8 @@ const routeCheck = (link: string) => {
       </v-avatar>
       <div v-if="storeUser.user.name">{{ storeUser.user.name }}</div>
       <div v-else><span>ユーザー</span></div>
-    </v-sheet> -->
-    <!-- <v-divider class="border-opacity-25"></v-divider> -->
+    </v-sheet>
+    <v-divider class="border-opacity-25"></v-divider>
     <v-list>
       <v-list-item router link to="/">
         <template v-slot:prepend><v-icon>mdi-home</v-icon></template>
@@ -84,6 +89,7 @@ const routeCheck = (link: string) => {
         :to="link.to"
         router
         :class="{'v-list-item--active': routeCheck(link.to)}"
+        :change="setTitle(link.title)"
       >
         <template v-slot:prepend><v-icon>{{ link.icon }}</v-icon></template>
         <v-list-item-title>{{ link.title }}</v-list-item-title>
@@ -96,6 +102,6 @@ const routeCheck = (link: string) => {
   </v-navigation-drawer>
   <v-app-bar app>
     <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-    <v-toolbar-title class="text-left"></v-toolbar-title>
+    <v-toolbar-title class="text-left">{{  route.name }}</v-toolbar-title>
   </v-app-bar>
 </template>

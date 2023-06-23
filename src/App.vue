@@ -5,9 +5,9 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 
 const routeCheck = () => {
-  if(route.name === 'Login') {
+  if(route.name === 'ログイン') {
     return false
-  } else if(route.name === 'Register') {
+  } else if(route.name === '新規登録') {
     return false
   } else {
     return true

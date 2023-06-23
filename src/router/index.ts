@@ -7,7 +7,7 @@ import ClientCreate from '../views/Client/Create.vue'
 import ClientEdit from '../views/Client/Edit.vue'
 import Analysis from '../views/Analysis.vue'
 import cookie from 'vue-cookie'
-import { useStoreUser } from "../stores/user";
+import { useStoreUser } from "../stores/user"
 import { NavigationGuardNext, RouteLocationNormalized, RouteRecordNormalized } from 'vue-router'
 
 //ユーザーが認証されていないときnextでログインページに飛ばす
@@ -22,39 +22,43 @@ const requireAuth = (to: RouteLocationNormalized, from: RouteLocationNormalized,
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'ホーム',
     component: Home,
     beforeEnter: requireAuth,
   },
   {
     path: '/login',
-    name: 'Login',
+    name: 'ログイン',
     component: Login
   },
   {
     path: '/register',
-    name: 'Register',
+    name: '新規登録',
     component: Register
   },
   {
     path: '/clients',
-    name: 'ClientIndex',
-    component: ClientIndex
+    name: '顧客管理',
+    component: ClientIndex,
+    beforeEnter: requireAuth,
   },
   {
     path: '/clients/create',
-    name: 'ClientCreate',
-    component: ClientCreate
+    name: '顧客登録',
+    component: ClientCreate,
+    beforeEnter: requireAuth,
   },
   {
     path: '/clients/edit/:client_id',
-    name: 'ClientEdit',
-    component: ClientEdit
+    name: '顧客編集',
+    component: ClientEdit,
+    beforeEnter: requireAuth,
   },
   {
     path: '/analysis',
-    name: 'Analysis',
-    component: Analysis
+    name: '売上分析',
+    component: Analysis,
+    beforeEnter: requireAuth,
   },
 ];
 

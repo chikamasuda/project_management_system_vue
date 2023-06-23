@@ -2,6 +2,7 @@
 import { Ref, ref, onMounted } from "vue"
 import axios from '../../plugins/axios.js'
 import { AxiosResponse, AxiosError } from 'axios'
+import Loading from "../../components/Loading.vue"
 import DialogCard from '../../components/DialogCard.vue'
 import CreateAlert from '../../components/CreateAlert.vue'
 import EditAlert from '../../components/EditAlert.vue'
@@ -124,9 +125,7 @@ const closeModal = () => {
 
 <template>
   <v-main>
-    <div class="pb-5 mb-5" v-show="isLoading">
-      <div class="loader">Loading.....</div>
-    </div>
+    <Loading v-show="isLoading" />
     <v-container class="py-8 px-6 mt-3" fluid  v-show="!isLoading">
       <v-row>
         <v-col cols="12">
@@ -138,11 +137,8 @@ const closeModal = () => {
             <v-card-title>
               顧客一覧
             </v-card-title>
-            <v-col cols="3" class="d-flex">
-              <v-text-field v-model="keyword" class="ml-1" density="compact" variant="solo" label="キーワード検索" single-line hide-detail @click:append-inner="search(keyword)" append-inner-icon="mdi-magnify">
-              </v-text-field>
-            </v-col>
-            <div class="d-flex ml-4 mb-5 mt-2">
+            <v-text-field v-model="keyword" class="ml-4 mt-2 mb-2 keyword-search" density="compact" variant="solo" label="キーワード検索" single-line hide-detail @click:append-inner="search(keyword)" append-inner-icon="mdi-magnify" />
+            <div class="d-flex ml-4 mb-5 mt-5">
               <v-btn color="blue-darken-2" class="mr-3" @click="csvDownload">CSVダウンロード</v-btn>
               <v-btn color="blue-darken-2" class="" to="/clients/create">顧客情報登録</v-btn>
             </div>

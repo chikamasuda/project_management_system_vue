@@ -2,7 +2,7 @@
 import { Ref, ref, onMounted } from "vue";
 import axios from "../plugins/axios.js";
 import { AxiosResponse, AxiosError } from "axios";
-import VueLoaders from "vue-loaders";
+import Loading from "../components/Loading.vue"
 import dayjs from "dayjs";
 import { useStoreUser } from "../stores/user";
 dayjs.locale("ja");
@@ -118,9 +118,7 @@ const format = (date: string) => {
 
 <template>
   <v-main>
-    <div class="pb-5 mb-5" v-show="isLoading">
-      <div class="loader">Loading.....</div>
-    </div>
+    <Loading v-show="isLoading" />
     <v-container class="py-8 px-6 mt-3" fluid v-show="!isLoading">
       <v-row>
         <v-col cols="12">

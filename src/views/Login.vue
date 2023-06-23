@@ -45,7 +45,7 @@ const login = async () => {
           <v-row justify="center" align-content="center">
           <v-col cols="10">
             <v-text-field label="Eメール" v-model="email" variant="underlined"></v-text-field>
-            <ul class="error text-left mt-2" v-for="error in emailError">
+            <ul class="error text-left" v-for="error in emailError">
               <li>{{ error }}</li>
             </ul>
             <v-text-field class="mt-4" type="password" label="パスワード" v-model="password" variant="underlined"></v-text-field>
@@ -53,7 +53,7 @@ const login = async () => {
               <li>{{ error }}</li>
             </ul>
             <div class="error text-left mt-2">{{ mismatchError }}</div>
-            <v-btn block class="text-none mt-4" color="blue-darken-1" size="large" @click="login">
+            <v-btn block class="text-none mt-4" color="blue-darken-2" size="large" @click="login">
               ログイン
             </v-btn>
             <div class="text-left pb-5 pt-4">
