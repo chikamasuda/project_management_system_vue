@@ -1,15 +1,31 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { Ref, ref } from "vue"
 import axios from '../plugins/axios.js'
 import { useRouter, useRoute } from 'vue-router'
 import Axios, { AxiosResponse, AxiosError } from 'axios'
 import cookie from "vue-cookie";
-import { useStoreUser } from "../stores/user";
+import { useStore } from 'vuex'
+
+const store = useStore()
+const state = ref<object>(store.state)
+
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  image_url: string | undefined;
+};
+
+const user: Ref<User> = ref({
+  id: 0,
+  name: "",
+  email: "",
+  image_url: "",
+});
 
 const route = useRoute()
 const router = useRouter()
 const drawer = ref<boolean>(true)
-const storeUser = useStoreUser()
 const title = ref<string>()
 const links = ref([
   {
@@ -37,11 +53,11 @@ const links = ref([
     title: '売上分析',
     to: '/analysis'
   },
-  {
-    icon: 'mdi-account',
-    title: 'ユーザー設定',
-    to: '/mypage'
-  },
+  // {
+  //   icon: 'mdi-account',
+  //   title: 'ユーザー設定',
+  //   to: '/mypage'
+  // },
 ])
 
 const logout = async () => {
@@ -66,16 +82,15 @@ const setTitle = (linkTitle: string) => {
 </script>
 
 <template>
-  <v-navigation-drawer color="blue-darken-3" v-model="drawer" clipped class="pt-3">
+  <v-navigation-drawer color="blue-darken-3" v-model="drawer" clipped class="pt-3" v-if="store.state.user">
     <v-sheet color="blue-darken-3" class="pa-4 text-center">
-      <v-avatar v-if="storeUser.user.image_url" class="mb-4" size="64">
-        <img :src="storeUser.user.image_url" class="avator" />
+      <v-avatar class="mb-4" size="64">
+        <img :src="store.state.user.image_url" class="avator" />
       </v-avatar>
-      <v-avatar v-else class="mb-4" color="grey-lighten-4" size="64">
+      <v-avatar v-if="!store.state.user.image_url" class="mb-4" color="grey-lighten-4" size="64">
         <img src="../assets/icon/no_image.svg" class="avator" />
       </v-avatar>
-      <div v-if="storeUser.user.name">{{ storeUser.user.name }}</div>
-      <div v-else><span>ユーザー</span></div>
+      <div>{{ store.state.user.name  }}</div>
     </v-sheet>
     <v-divider class="border-opacity-25"></v-divider>
     <v-list>
@@ -105,3 +120,4 @@ const setTitle = (linkTitle: string) => {
     <v-toolbar-title class="text-left">{{  route.name }}</v-toolbar-title>
   </v-app-bar>
 </template>
+../store/user

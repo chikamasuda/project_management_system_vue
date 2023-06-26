@@ -3,6 +3,8 @@ import { ref } from "vue"
 import axios from '../plugins/axios.js'
 import { useRouter } from 'vue-router'
 import cookie from 'vue-cookie'
+import Axios, { AxiosResponse, AxiosError } from 'axios'
+import store from '../store/index'
 
 const tab = ref<string>('')
 const email = ref<string>('')
@@ -20,7 +22,16 @@ const login = async () => {
     email.value = ""
     password.value = ""
     cookie.set('user_token', JSON.parse(res.data.token)['access_token'], 30)
-    router.push('/')
+    axios.get("/api/users")
+      .then((res: AxiosResponse) => {
+        console.log(res)
+        store.dispatch("setUser", res.data.user)
+        console.log(store.state.user)
+        router.push('/')
+      })
+      .catch((error: AxiosError) => {
+        console.log(error);
+      });
   }).catch((error) => {
     console.log(error)
     if (error.response.data.message == 'Unauthorized') {

@@ -4,10 +4,9 @@ import axios from "../plugins/axios.js";
 import { AxiosResponse, AxiosError } from "axios";
 import Loading from "../components/Loading.vue"
 import dayjs from "dayjs";
-import { useStoreUser } from "../stores/user";
+import store from '../store/index'
 dayjs.locale("ja");
 
-const storeUser = useStoreUser();
 const status = ref(["", "待機中", "継続中", "終了"]);
 const todo = ref([]);
 const isLoading = ref<boolean>(true)
@@ -67,7 +66,9 @@ onMounted(async () => {
   await axios
     .get("/api/users")
     .then((res: AxiosResponse) => {
-      storeUser.user = res.data.user
+      console.log(res)
+      store.dispatch("setUser", res.data.user)
+      console.log(store.state.user)
     })
     .catch((error: AxiosError) => {
       console.log(error);
@@ -203,3 +204,4 @@ const format = (date: string) => {
     </v-container>
   </v-main>
 </template>
+../store/user
