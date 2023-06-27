@@ -5,6 +5,9 @@ import Register from '../views/Register.vue'
 import ClientIndex from '../views/Client/Index.vue'
 import ClientCreate from '../views/Client/Create.vue'
 import ClientEdit from '../views/Client/Edit.vue'
+import ProjectIndex from '../views/Project/Index.vue'
+import ProjectCreate from '../views/Project/Create.vue'
+import ProjectEdit from '../views/Project/Edit.vue'
 import Analysis from '../views/Analysis.vue'
 import cookie from 'vue-cookie'
 import store from '../store/index'
@@ -58,6 +61,24 @@ const routes = [
     path: '/analysis',
     name: '売上分析',
     component: Analysis,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: '/projects',
+    name: '案件管理',
+    component: ProjectIndex,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: '/projects/create',
+    name: '案件登録',
+    component: ProjectCreate,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: '/projects/edit/:client_id',
+    name: '案件編集',
+    component: ProjectEdit,
     beforeEnter: requireAuth,
   },
 ];

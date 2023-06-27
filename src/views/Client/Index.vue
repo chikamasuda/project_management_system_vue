@@ -49,7 +49,6 @@ onMounted(async () => {
     .then((res: AxiosResponse) => {
       clients.value = res.data.clients
       isLoading.value = false
-      console.log(res)
     }).catch((error: AxiosError) => {
       console.log(error)
     })
