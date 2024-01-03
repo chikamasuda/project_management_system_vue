@@ -132,12 +132,15 @@ const closeModal = () => {
           <CreateAlert />
           <EditAlert />
           <DeleteAlert v-show="deleteAlert" />
-          <v-card>
-            <v-card-title>
-              顧客一覧
-            </v-card-title>
-            <v-text-field v-model="keyword" class="ml-4 mt-2 mb-2 keyword-search" density="compact" variant="solo" label="キーワード検索" single-line hide-detail @click:append-inner="search(keyword)" append-inner-icon="mdi-magnify" />
-            <div class="d-flex ml-4 mb-5 mt-5">
+          <v-card class="pt-2">
+            <v-col cols="8">
+              <div class="d-flex">
+                <v-text-field v-model="keyword" class="ml-1 mr-4 mt-3 mb-2 keyword-search" density="compact" variant="solo" label="キーワード検索" single-line hide-detail />
+                <v-select label="ステータス" :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']" density="compact" variant="solo" class="mt-2 ml-4 pt-1 mr-2" single-line hide-detail></v-select>
+                <v-btn color="blue-darken-2" size="large" class="mt-3 ml-5" @click="search(keyword)">検索</v-btn>
+              </div>
+            </v-col>
+            <div class="d-flex ml-4 mb-5 mt-2">
               <v-btn color="blue-darken-2" class="mr-3" @click="csvDownload">CSVダウンロード</v-btn>
               <v-btn color="blue-darken-2" class="" to="/clients/create">顧客情報登録</v-btn>
             </div>

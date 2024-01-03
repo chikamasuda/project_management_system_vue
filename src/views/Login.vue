@@ -21,7 +21,7 @@ const login = async () => {
   }).then((res) => {
     email.value = ""
     password.value = ""
-    cookie.set('user_token', JSON.parse(res.data.token)['access_token'], 30)
+    cookie.set('user_token', res.data.token, 30)
     axios.get("/api/users")
       .then((res: AxiosResponse) => {
         console.log(res)
@@ -64,7 +64,7 @@ const login = async () => {
               <li>{{ error }}</li>
             </ul>
             <div class="error text-left mt-2">{{ mismatchError }}</div>
-            <v-btn block class="text-none mt-4" color="blue-darken-2" size="large" @click="login">
+            <v-btn block class="text-none mt-4" color="blue-lighten-1" size="large" @click="login">
               ログイン
             </v-btn>
             <div class="text-left pb-5 pt-4">

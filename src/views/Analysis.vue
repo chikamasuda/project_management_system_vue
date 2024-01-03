@@ -115,11 +115,8 @@ const analysis = async () => {
     <v-container class="py-8 px-6 mt-3" fluid>
       <v-row>
         <v-col cols="12">
-          <v-card class="analysis-card mb-5 pb-5">
-            <v-card-title>
-              売上分析
-            </v-card-title>
-              <div class="ml-5 bg-blue-grey-lighten-5 mr-5 pb-5 pt-3 search-container">
+          <v-card class="analysis-card mb-5 pb-5 pt-5">
+              <div class="ml-5 bg-blue-grey-lighten-5 mr-5 pb-5 pt-3 mt-3 search-container">
                 <div class="d-flex search-item pl-4">
                   <v-label for="" class="mt-2 mr-3 font-weight-bold">種別</v-label>
                   <v-radio-group inline dense class="ml-5 mt-1 pl-5" v-model="type">

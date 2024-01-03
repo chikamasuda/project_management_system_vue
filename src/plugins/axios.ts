@@ -6,10 +6,8 @@ import Axios, { AxiosError } from 'axios';
 const env = import.meta.env.VITE_APP_ENV
 const token = 'Bearer ' + cookie.get('user_token')
 
-let baseURL = 'https://safe-dawn-95610-251e839169ba.herokuapp.com/'
-
 const axiosInstance = axios.create({
-  baseURL: baseURL,
+  baseURL:'http://localhost',
   headers: {
     'Accept': 'application/json',
     'Authorization': token

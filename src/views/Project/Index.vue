@@ -69,10 +69,7 @@ onMounted(async () => {
           <CreateAlert />
           <EditAlert />
           <DeleteAlert v-show="deleteAlert" />
-          <v-card>
-            <v-card-title>
-              案件一覧
-            </v-card-title>
+          <v-card class="pt-5">
             <v-text-field v-model="keyword" class="ml-4 mt-2 mb-2 keyword-search" density="compact" variant="solo" label="キーワード検索" single-line hide-detail @click:append-inner="" append-inner-icon="mdi-magnify" />
             <div class="d-flex ml-4 mb-5 mt-5">
               <v-btn color="blue-darken-2" class="mr-3" @click="">CSVダウンロード</v-btn>
